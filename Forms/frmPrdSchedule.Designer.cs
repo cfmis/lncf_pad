@@ -105,16 +105,7 @@
             this.lblSpeed_lever = new System.Windows.Forms.Label();
             this.txtPer_Convert_qty = new System.Windows.Forms.TextBox();
             this.txtTotalQty = new System.Windows.Forms.TextBox();
-            this.dgvAndSingle = new System.Windows.Forms.DataGridView();
-            this.colprd_mo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colprd_item = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colQty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrd_date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrd_mo_sub = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrd_qty_sub = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSer_qo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrd_id_ref = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrd_item_sub = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvMoMerge = new System.Windows.Forms.DataGridView();
             this.lblStandard_per_qty = new System.Windows.Forms.Label();
             this.txtWork_class = new System.Windows.Forms.TextBox();
             this.lblWork_code = new System.Windows.Forms.Label();
@@ -132,11 +123,8 @@
             this.txtFindMo = new System.Windows.Forms.TextBox();
             this.btnFindMo = new System.Windows.Forms.Button();
             this.txtBarCodeItem = new System.Windows.Forms.TextBox();
-            this.rdbSearch2 = new System.Windows.Forms.RadioButton();
-            this.rdbSearch1 = new System.Windows.Forms.RadioButton();
-            this.btnMo_search = new System.Windows.Forms.Button();
             this.lblMo_search = new System.Windows.Forms.Label();
-            this.txtMo_search = new System.Windows.Forms.TextBox();
+            this.txtMoMerge = new System.Windows.Forms.TextBox();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -175,6 +163,9 @@
             this.lblPack_num = new System.Windows.Forms.Label();
             this.txtPack_num = new System.Windows.Forms.TextBox();
             this.panel5 = new System.Windows.Forms.Panel();
+            this.lblBakeTime = new System.Windows.Forms.Label();
+            this.lblMakeColor = new System.Windows.Forms.Label();
+            this.cmbMakeColor = new System.Windows.Forms.ComboBox();
             this.txtActual_qty = new System.Windows.Forms.TextBox();
             this.lblActual_qty = new System.Windows.Forms.Label();
             this.cmbDifficultyLevel = new System.Windows.Forms.ComboBox();
@@ -197,7 +188,6 @@
             this.dgvDetails = new System.Windows.Forms.DataGridView();
             this.tp1Mer = new System.Windows.Forms.TabPage();
             this.panel9 = new System.Windows.Forms.Panel();
-            this.panel10 = new System.Windows.Forms.Panel();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -218,11 +208,22 @@
             this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmbGoodsMerge = new System.Windows.Forms.ComboBox();
+            this.btnMerge = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtPrd_qty_merge = new System.Windows.Forms.TextBox();
+            this.colprd_mo_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colprd_item_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colprd_qty_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnAddMergeMo = new System.Windows.Forms.Button();
+            this.lblGoodsMerge = new System.Windows.Forms.Label();
+            this.lblprd_qty_merge = new System.Windows.Forms.Label();
+            this.btnDeleteMergeMo = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel11.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAndSingle)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMoMerge)).BeginInit();
             this.panel2.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tp1Dep.SuspendLayout();
@@ -240,7 +241,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetails)).BeginInit();
             this.tp1Mer.SuspendLayout();
             this.panel9.SuspendLayout();
-            this.panel10.SuspendLayout();
             this.SuspendLayout();
             // 
             // chkcont_work1
@@ -346,7 +346,6 @@
             this.cmbGroup.Name = "cmbGroup";
             this.cmbGroup.Size = new System.Drawing.Size(178, 27);
             this.cmbGroup.TabIndex = 4;
-            this.cmbGroup.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtmo_id_KeyPress);
             this.cmbGroup.Leave += new System.EventHandler(this.cmbGroup_Leave);
             // 
             // cmbGoods_id
@@ -373,7 +372,6 @@
             this.cmbOrder_class.Name = "cmbOrder_class";
             this.cmbOrder_class.Size = new System.Drawing.Size(178, 27);
             this.cmbOrder_class.TabIndex = 3;
-            this.cmbOrder_class.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtmo_id_KeyPress);
             this.cmbOrder_class.Leave += new System.EventHandler(this.cmbOrder_class_Leave);
             // 
             // cmbWorkType
@@ -846,7 +844,9 @@
             this.btnBrowse,
             this.toolStripSeparator6,
             this.btnImput,
-            this.toolStripSeparator7});
+            this.toolStripSeparator7,
+            this.btnMerge,
+            this.toolStripSeparator8});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1229, 44);
@@ -1091,103 +1091,24 @@
             this.txtTotalQty.TabIndex = 11;
             this.txtTotalQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtmo_id_KeyPress);
             // 
-            // dgvAndSingle
+            // dgvMoMerge
             // 
-            this.dgvAndSingle.AllowUserToAddRows = false;
-            this.dgvAndSingle.ColumnHeadersHeight = 30;
-            this.dgvAndSingle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvAndSingle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colprd_mo,
-            this.colprd_item,
-            this.colQty,
-            this.colPrd_date,
-            this.colPrd_mo_sub,
-            this.colPrd_qty_sub,
-            this.colSer_qo,
-            this.colPrd_id_ref,
-            this.colPrd_item_sub});
-            this.dgvAndSingle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvAndSingle.Location = new System.Drawing.Point(0, 48);
-            this.dgvAndSingle.Name = "dgvAndSingle";
-            this.dgvAndSingle.ReadOnly = true;
-            this.dgvAndSingle.RowHeadersWidth = 20;
-            this.dgvAndSingle.RowTemplate.Height = 30;
-            this.dgvAndSingle.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dgvAndSingle.Size = new System.Drawing.Size(1225, 523);
-            this.dgvAndSingle.TabIndex = 33;
-            this.dgvAndSingle.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAndSingle_CellClick);
-            // 
-            // colprd_mo
-            // 
-            this.colprd_mo.DataPropertyName = "prd_mo";
-            this.colprd_mo.HeaderText = "制單編號(主)";
-            this.colprd_mo.Name = "colprd_mo";
-            this.colprd_mo.ReadOnly = true;
-            this.colprd_mo.Width = 160;
-            // 
-            // colprd_item
-            // 
-            this.colprd_item.DataPropertyName = "prd_item";
-            this.colprd_item.HeaderText = "物料編號(主)";
-            this.colprd_item.Name = "colprd_item";
-            this.colprd_item.ReadOnly = true;
-            this.colprd_item.Width = 260;
-            // 
-            // colQty
-            // 
-            this.colQty.DataPropertyName = "prd_qty";
-            this.colQty.HeaderText = "總生產數量";
-            this.colQty.Name = "colQty";
-            this.colQty.ReadOnly = true;
-            this.colQty.Width = 120;
-            // 
-            // colPrd_date
-            // 
-            this.colPrd_date.DataPropertyName = "prd_date";
-            this.colPrd_date.HeaderText = "生產日期";
-            this.colPrd_date.Name = "colPrd_date";
-            this.colPrd_date.ReadOnly = true;
-            this.colPrd_date.Width = 120;
-            // 
-            // colPrd_mo_sub
-            // 
-            this.colPrd_mo_sub.DataPropertyName = "prd_mo_sub";
-            this.colPrd_mo_sub.HeaderText = "制單編號(分)";
-            this.colPrd_mo_sub.Name = "colPrd_mo_sub";
-            this.colPrd_mo_sub.ReadOnly = true;
-            this.colPrd_mo_sub.Width = 160;
-            // 
-            // colPrd_qty_sub
-            // 
-            this.colPrd_qty_sub.DataPropertyName = "prd_qty_sub";
-            this.colPrd_qty_sub.HeaderText = "生產數量(分)";
-            this.colPrd_qty_sub.Name = "colPrd_qty_sub";
-            this.colPrd_qty_sub.ReadOnly = true;
-            this.colPrd_qty_sub.Width = 120;
-            // 
-            // colSer_qo
-            // 
-            this.colSer_qo.DataPropertyName = "prd_id";
-            this.colSer_qo.HeaderText = "記錄號(主)";
-            this.colSer_qo.Name = "colSer_qo";
-            this.colSer_qo.ReadOnly = true;
-            this.colSer_qo.Width = 120;
-            // 
-            // colPrd_id_ref
-            // 
-            this.colPrd_id_ref.DataPropertyName = "prd_id_ref";
-            this.colPrd_id_ref.HeaderText = "記錄號(分)";
-            this.colPrd_id_ref.Name = "colPrd_id_ref";
-            this.colPrd_id_ref.ReadOnly = true;
-            this.colPrd_id_ref.Width = 77;
-            // 
-            // colPrd_item_sub
-            // 
-            this.colPrd_item_sub.DataPropertyName = "prd_item_sub";
-            this.colPrd_item_sub.HeaderText = "物料編號(分)";
-            this.colPrd_item_sub.Name = "colPrd_item_sub";
-            this.colPrd_item_sub.ReadOnly = true;
-            this.colPrd_item_sub.Width = 260;
+            this.dgvMoMerge.AllowUserToAddRows = false;
+            this.dgvMoMerge.ColumnHeadersHeight = 30;
+            this.dgvMoMerge.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvMoMerge.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colprd_mo_merge,
+            this.colprd_item_merge,
+            this.colprd_qty_merge});
+            this.dgvMoMerge.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMoMerge.Location = new System.Drawing.Point(0, 48);
+            this.dgvMoMerge.Name = "dgvMoMerge";
+            this.dgvMoMerge.ReadOnly = true;
+            this.dgvMoMerge.RowHeadersWidth = 20;
+            this.dgvMoMerge.RowTemplate.Height = 30;
+            this.dgvMoMerge.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgvMoMerge.Size = new System.Drawing.Size(1225, 566);
+            this.dgvMoMerge.TabIndex = 33;
             // 
             // lblStandard_per_qty
             // 
@@ -1380,61 +1301,25 @@
             this.txtBarCodeItem.TabIndex = 34;
             this.txtBarCodeItem.Visible = false;
             // 
-            // rdbSearch2
-            // 
-            this.rdbSearch2.AutoSize = true;
-            this.rdbSearch2.Checked = true;
-            this.rdbSearch2.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rdbSearch2.Location = new System.Drawing.Point(108, 7);
-            this.rdbSearch2.Name = "rdbSearch2";
-            this.rdbSearch2.Size = new System.Drawing.Size(90, 20);
-            this.rdbSearch2.TabIndex = 4;
-            this.rdbSearch2.TabStop = true;
-            this.rdbSearch2.Text = "反向查詢";
-            this.rdbSearch2.UseVisualStyleBackColor = true;
-            this.rdbSearch2.Click += new System.EventHandler(this.rdbSearch2_Click);
-            // 
-            // rdbSearch1
-            // 
-            this.rdbSearch1.AutoSize = true;
-            this.rdbSearch1.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.rdbSearch1.Location = new System.Drawing.Point(12, 6);
-            this.rdbSearch1.Name = "rdbSearch1";
-            this.rdbSearch1.Size = new System.Drawing.Size(90, 20);
-            this.rdbSearch1.TabIndex = 3;
-            this.rdbSearch1.Text = "正向查詢";
-            this.rdbSearch1.UseVisualStyleBackColor = true;
-            this.rdbSearch1.Click += new System.EventHandler(this.rdbSearch1_Click);
-            // 
-            // btnMo_search
-            // 
-            this.btnMo_search.BackColor = System.Drawing.SystemColors.Control;
-            this.btnMo_search.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.btnMo_search.Location = new System.Drawing.Point(481, 10);
-            this.btnMo_search.Name = "btnMo_search";
-            this.btnMo_search.Size = new System.Drawing.Size(80, 30);
-            this.btnMo_search.TabIndex = 2;
-            this.btnMo_search.Text = "查找";
-            this.btnMo_search.UseVisualStyleBackColor = false;
-            this.btnMo_search.Click += new System.EventHandler(this.btnMo_search_Click);
-            // 
             // lblMo_search
             // 
             this.lblMo_search.AutoSize = true;
             this.lblMo_search.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.lblMo_search.Location = new System.Drawing.Point(9, 13);
+            this.lblMo_search.Location = new System.Drawing.Point(23, 16);
             this.lblMo_search.Name = "lblMo_search";
             this.lblMo_search.Size = new System.Drawing.Size(76, 16);
             this.lblMo_search.TabIndex = 1;
             this.lblMo_search.Text = "制單編號:";
             // 
-            // txtMo_search
+            // txtMoMerge
             // 
-            this.txtMo_search.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.txtMo_search.Location = new System.Drawing.Point(91, 9);
-            this.txtMo_search.Name = "txtMo_search";
-            this.txtMo_search.Size = new System.Drawing.Size(172, 27);
-            this.txtMo_search.TabIndex = 0;
+            this.txtMoMerge.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.txtMoMerge.Location = new System.Drawing.Point(98, 13);
+            this.txtMoMerge.MaxLength = 9;
+            this.txtMoMerge.Name = "txtMoMerge";
+            this.txtMoMerge.Size = new System.Drawing.Size(172, 27);
+            this.txtMoMerge.TabIndex = 0;
+            this.txtMoMerge.Leave += new System.EventHandler(this.txtMoMerge_Leave);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -1519,7 +1404,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(12, 1);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1233, 699);
+            this.tabControl1.Size = new System.Drawing.Size(1233, 742);
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Click += new System.EventHandler(this.tabControl1_Click);
             // 
@@ -1536,7 +1421,7 @@
             this.tp1Dep.Location = new System.Drawing.Point(4, 124);
             this.tp1Dep.Name = "tp1Dep";
             this.tp1Dep.Padding = new System.Windows.Forms.Padding(3);
-            this.tp1Dep.Size = new System.Drawing.Size(1225, 571);
+            this.tp1Dep.Size = new System.Drawing.Size(1225, 614);
             this.tp1Dep.TabIndex = 0;
             this.tp1Dep.Text = "編輯--基本資料";
             this.tp1Dep.UseVisualStyleBackColor = true;
@@ -1564,7 +1449,7 @@
             this.panel12.Controls.Add(this.label4);
             this.panel12.Controls.Add(this.btnCount_qty);
             this.panel12.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel12.Location = new System.Drawing.Point(3, 541);
+            this.panel12.Location = new System.Drawing.Point(3, 553);
             this.panel12.Name = "panel12";
             this.panel12.Size = new System.Drawing.Size(1215, 142);
             this.panel12.TabIndex = 44;
@@ -1705,7 +1590,7 @@
             this.panel13.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel13.Location = new System.Drawing.Point(3, 393);
             this.panel13.Name = "panel13";
-            this.panel13.Size = new System.Drawing.Size(1215, 148);
+            this.panel13.Size = new System.Drawing.Size(1215, 160);
             this.panel13.TabIndex = 45;
             // 
             // dgvWorker
@@ -1722,7 +1607,7 @@
             this.dgvWorker.ReadOnly = true;
             this.dgvWorker.RowHeadersWidth = 10;
             this.dgvWorker.RowTemplate.Height = 24;
-            this.dgvWorker.Size = new System.Drawing.Size(1215, 106);
+            this.dgvWorker.Size = new System.Drawing.Size(1215, 118);
             this.dgvWorker.TabIndex = 7;
             // 
             // colPrdWorker
@@ -1834,6 +1719,10 @@
             // panel5
             // 
             this.panel5.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.panel5.Controls.Add(this.lblBakeTime);
+            this.panel5.Controls.Add(this.lblMakeColor);
+            this.panel5.Controls.Add(this.cmbMakeColor);
+            this.panel5.Controls.Add(this.lblEnd_run);
             this.panel5.Controls.Add(this.txtActual_qty);
             this.panel5.Controls.Add(this.lblActual_qty);
             this.panel5.Controls.Add(this.cmbDifficultyLevel);
@@ -1855,7 +1744,6 @@
             this.panel5.Controls.Add(this.txtSpeed_lever);
             this.panel5.Controls.Add(this.txtEnd_run);
             this.panel5.Controls.Add(this.lblWork_class);
-            this.panel5.Controls.Add(this.lblEnd_run);
             this.panel5.Controls.Add(this.txtWork_class);
             this.panel5.Controls.Add(this.txtStart_run);
             this.panel5.Controls.Add(this.lblStart_run);
@@ -1867,6 +1755,34 @@
             this.panel5.Size = new System.Drawing.Size(1215, 102);
             this.panel5.TabIndex = 4;
             // 
+            // lblBakeTime
+            // 
+            this.lblBakeTime.AutoSize = true;
+            this.lblBakeTime.Location = new System.Drawing.Point(1092, 72);
+            this.lblBakeTime.Name = "lblBakeTime";
+            this.lblBakeTime.Size = new System.Drawing.Size(40, 16);
+            this.lblBakeTime.TabIndex = 51;
+            this.lblBakeTime.Text = "分鐘";
+            // 
+            // lblMakeColor
+            // 
+            this.lblMakeColor.AutoSize = true;
+            this.lblMakeColor.Location = new System.Drawing.Point(1078, 8);
+            this.lblMakeColor.Name = "lblMakeColor";
+            this.lblMakeColor.Size = new System.Drawing.Size(76, 16);
+            this.lblMakeColor.TabIndex = 50;
+            this.lblMakeColor.Text = "顏色做法:";
+            // 
+            // cmbMakeColor
+            // 
+            this.cmbMakeColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMakeColor.Font = new System.Drawing.Font("新細明體", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cmbMakeColor.FormattingEnabled = true;
+            this.cmbMakeColor.Location = new System.Drawing.Point(1073, 32);
+            this.cmbMakeColor.Name = "cmbMakeColor";
+            this.cmbMakeColor.Size = new System.Drawing.Size(178, 29);
+            this.cmbMakeColor.TabIndex = 49;
+            // 
             // txtActual_qty
             // 
             this.txtActual_qty.Location = new System.Drawing.Point(875, 6);
@@ -1874,6 +1790,7 @@
             this.txtActual_qty.Size = new System.Drawing.Size(178, 27);
             this.txtActual_qty.TabIndex = 48;
             this.txtActual_qty.Visible = false;
+            this.txtActual_qty.TextChanged += new System.EventHandler(this.txtActual_qty_TextChanged);
             // 
             // lblActual_qty
             // 
@@ -1887,6 +1804,7 @@
             // 
             // cmbDifficultyLevel
             // 
+            this.cmbDifficultyLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDifficultyLevel.Font = new System.Drawing.Font("新細明體", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cmbDifficultyLevel.FormattingEnabled = true;
             this.cmbDifficultyLevel.Location = new System.Drawing.Point(875, 67);
@@ -1896,6 +1814,7 @@
             // 
             // cmbJob_type
             // 
+            this.cmbJob_type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbJob_type.Font = new System.Drawing.Font("新細明體", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cmbJob_type.FormattingEnabled = true;
             this.cmbJob_type.Location = new System.Drawing.Point(92, 4);
@@ -1908,7 +1827,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(864, 24);
+            this.label5.Location = new System.Drawing.Point(869, 40);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(184, 16);
             this.label5.TabIndex = 43;
@@ -1917,6 +1836,7 @@
             // 
             // cmbWorkCode
             // 
+            this.cmbWorkCode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbWorkCode.DropDownWidth = 320;
             this.cmbWorkCode.Font = new System.Drawing.Font("新細明體", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cmbWorkCode.FormattingEnabled = true;
@@ -2087,7 +2007,7 @@
             this.tp1Details.Controls.Add(this.panel2);
             this.tp1Details.Location = new System.Drawing.Point(4, 124);
             this.tp1Details.Name = "tp1Details";
-            this.tp1Details.Size = new System.Drawing.Size(1225, 571);
+            this.tp1Details.Size = new System.Drawing.Size(1225, 614);
             this.tp1Details.TabIndex = 4;
             this.tp1Details.Text = "瀏覽--生產明細";
             this.tp1Details.UseVisualStyleBackColor = true;
@@ -2096,9 +2016,6 @@
             // 
             this.dgvDetails.AllowUserToAddRows = false;
             this.dgvDetails.AllowUserToDeleteRows = false;
-            this.dgvDetails.AllowUserToOrderColumns = true;
-            this.dgvDetails.AllowUserToResizeColumns = false;
-            this.dgvDetails.AllowUserToResizeRows = false;
             this.dgvDetails.BackgroundColor = System.Drawing.SystemColors.Window;
             this.dgvDetails.ColumnHeadersHeight = 35;
             this.dgvDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
@@ -2126,10 +2043,9 @@
             this.dgvDetails.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvDetails.Location = new System.Drawing.Point(0, 50);
             this.dgvDetails.Name = "dgvDetails";
-            this.dgvDetails.ReadOnly = true;
             this.dgvDetails.RowHeadersWidth = 30;
             this.dgvDetails.RowTemplate.Height = 80;
-            this.dgvDetails.Size = new System.Drawing.Size(1221, 517);
+            this.dgvDetails.Size = new System.Drawing.Size(1221, 560);
             this.dgvDetails.TabIndex = 32;
             this.dgvDetails.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetails_CellClick);
             this.dgvDetails.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetails_CellLeave);
@@ -2137,42 +2053,36 @@
             // 
             // tp1Mer
             // 
-            this.tp1Mer.Controls.Add(this.dgvAndSingle);
+            this.tp1Mer.Controls.Add(this.dgvMoMerge);
             this.tp1Mer.Controls.Add(this.panel9);
             this.tp1Mer.Location = new System.Drawing.Point(4, 124);
             this.tp1Mer.Name = "tp1Mer";
-            this.tp1Mer.Size = new System.Drawing.Size(1225, 571);
+            this.tp1Mer.Size = new System.Drawing.Size(1225, 614);
             this.tp1Mer.TabIndex = 5;
             this.tp1Mer.Text = "制單并單";
             this.tp1Mer.UseVisualStyleBackColor = true;
             // 
             // panel9
             // 
-            this.panel9.Controls.Add(this.panel10);
+            this.panel9.Controls.Add(this.btnDeleteMergeMo);
+            this.panel9.Controls.Add(this.lblprd_qty_merge);
+            this.panel9.Controls.Add(this.lblGoodsMerge);
+            this.panel9.Controls.Add(this.btnAddMergeMo);
+            this.panel9.Controls.Add(this.txtPrd_qty_merge);
+            this.panel9.Controls.Add(this.cmbGoodsMerge);
             this.panel9.Controls.Add(this.lblMo_search);
-            this.panel9.Controls.Add(this.txtMo_search);
-            this.panel9.Controls.Add(this.btnMo_search);
+            this.panel9.Controls.Add(this.txtMoMerge);
             this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel9.Location = new System.Drawing.Point(0, 0);
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(1225, 48);
             this.panel9.TabIndex = 34;
             // 
-            // panel10
-            // 
-            this.panel10.Controls.Add(this.rdbSearch1);
-            this.panel10.Controls.Add(this.rdbSearch2);
-            this.panel10.Location = new System.Drawing.Point(269, 9);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(202, 32);
-            this.panel10.TabIndex = 5;
-            // 
             // Column2
             // 
             this.Column2.DataPropertyName = "prd_start_time";
             this.Column2.HeaderText = "開始時間";
             this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             this.Column2.Width = 80;
             // 
             // Column1
@@ -2180,7 +2090,6 @@
             this.Column1.DataPropertyName = "prd_end_time";
             this.Column1.HeaderText = "結束時間";
             this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
             this.Column1.Width = 80;
             // 
             // Column9
@@ -2188,7 +2097,6 @@
             this.Column9.DataPropertyName = "prd_date";
             this.Column9.HeaderText = "生產日期";
             this.Column9.Name = "Column9";
-            this.Column9.ReadOnly = true;
             this.Column9.Width = 120;
             // 
             // Column17
@@ -2204,7 +2112,6 @@
             this.Column5.DataPropertyName = "prd_qty";
             this.Column5.HeaderText = "生產數量";
             this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
             this.Column5.Width = 80;
             // 
             // Column7
@@ -2212,7 +2119,6 @@
             this.Column7.DataPropertyName = "prd_mo";
             this.Column7.HeaderText = "制單編號";
             this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
             this.Column7.Width = 120;
             // 
             // Column8
@@ -2220,7 +2126,6 @@
             this.Column8.DataPropertyName = "prd_item";
             this.Column8.HeaderText = "物料編號";
             this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
             this.Column8.Width = 200;
             // 
             // Column18
@@ -2228,7 +2133,6 @@
             this.Column18.DataPropertyName = "prd_item_cdesc";
             this.Column18.HeaderText = "物料描述";
             this.Column18.Name = "Column18";
-            this.Column18.ReadOnly = true;
             this.Column18.Width = 300;
             // 
             // Column3
@@ -2236,7 +2140,6 @@
             this.Column3.DataPropertyName = "work_type_desc";
             this.Column3.HeaderText = "工作類型";
             this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
             this.Column3.Width = 80;
             // 
             // Column19
@@ -2244,14 +2147,12 @@
             this.Column19.DataPropertyName = "job_desc";
             this.Column19.HeaderText = "工種描述";
             this.Column19.Name = "Column19";
-            this.Column19.ReadOnly = true;
             // 
             // Column4
             // 
             this.Column4.DataPropertyName = "prd_machine";
             this.Column4.HeaderText = "生產機器";
             this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
             this.Column4.Width = 120;
             // 
             // Column20
@@ -2259,7 +2160,6 @@
             this.Column20.DataPropertyName = "row_times";
             this.Column20.HeaderText = "排板次數";
             this.Column20.Name = "Column20";
-            this.Column20.ReadOnly = true;
             this.Column20.Width = 90;
             // 
             // Column6
@@ -2267,7 +2167,6 @@
             this.Column6.DataPropertyName = "prd_weg";
             this.Column6.HeaderText = "生產重量";
             this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
             this.Column6.Width = 80;
             // 
             // Column10
@@ -2275,7 +2174,6 @@
             this.Column10.DataPropertyName = "prd_pdate";
             this.Column10.HeaderText = "安排日期";
             this.Column10.Name = "Column10";
-            this.Column10.ReadOnly = true;
             this.Column10.Width = 120;
             // 
             // Column11
@@ -2283,28 +2181,24 @@
             this.Column11.DataPropertyName = "prd_id";
             this.Column11.HeaderText = "記錄號";
             this.Column11.Name = "Column11";
-            this.Column11.ReadOnly = true;
             // 
             // Column12
             // 
             this.Column12.DataPropertyName = "prd_group";
             this.Column12.HeaderText = "組別";
             this.Column12.Name = "Column12";
-            this.Column12.ReadOnly = true;
             // 
             // Column13
             // 
             this.Column13.DataPropertyName = "crusr";
             this.Column13.HeaderText = "建立人員";
             this.Column13.Name = "Column13";
-            this.Column13.ReadOnly = true;
             // 
             // Column14
             // 
             this.Column14.DataPropertyName = "crtim";
             this.Column14.HeaderText = "建立日期";
             this.Column14.Name = "Column14";
-            this.Column14.ReadOnly = true;
             this.Column14.Width = 180;
             // 
             // Column15
@@ -2312,21 +2206,115 @@
             this.Column15.DataPropertyName = "amusr";
             this.Column15.HeaderText = "錄入(生產)";
             this.Column15.Name = "Column15";
-            this.Column15.ReadOnly = true;
             // 
             // Column16
             // 
             this.Column16.DataPropertyName = "amtim";
             this.Column16.HeaderText = "錄入日期(生產)";
             this.Column16.Name = "Column16";
-            this.Column16.ReadOnly = true;
             this.Column16.Width = 180;
+            // 
+            // cmbGoodsMerge
+            // 
+            this.cmbGoodsMerge.Font = new System.Drawing.Font("新細明體", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cmbGoodsMerge.FormattingEnabled = true;
+            this.cmbGoodsMerge.Location = new System.Drawing.Point(372, 13);
+            this.cmbGoodsMerge.MaxLength = 18;
+            this.cmbGoodsMerge.Name = "cmbGoodsMerge";
+            this.cmbGoodsMerge.Size = new System.Drawing.Size(267, 27);
+            this.cmbGoodsMerge.TabIndex = 2;
+            this.cmbGoodsMerge.Leave += new System.EventHandler(this.cmbGoodsMerge_Leave);
+            // 
+            // btnMerge
+            // 
+            this.btnMerge.AutoSize = false;
+            this.btnMerge.Image = ((System.Drawing.Image)(resources.GetObject("btnMerge.Image")));
+            this.btnMerge.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnMerge.Name = "btnMerge";
+            this.btnMerge.Size = new System.Drawing.Size(85, 46);
+            this.btnMerge.Text = "并單生產(&G)";
+            this.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 44);
+            // 
+            // txtPrd_qty_merge
+            // 
+            this.txtPrd_qty_merge.Location = new System.Drawing.Point(726, 13);
+            this.txtPrd_qty_merge.Name = "txtPrd_qty_merge";
+            this.txtPrd_qty_merge.Size = new System.Drawing.Size(100, 27);
+            this.txtPrd_qty_merge.TabIndex = 3;
+            // 
+            // colprd_mo_merge
+            // 
+            this.colprd_mo_merge.DataPropertyName = "prd_mo";
+            this.colprd_mo_merge.HeaderText = "制單編號";
+            this.colprd_mo_merge.Name = "colprd_mo_merge";
+            this.colprd_mo_merge.ReadOnly = true;
+            this.colprd_mo_merge.Width = 160;
+            // 
+            // colprd_item_merge
+            // 
+            this.colprd_item_merge.DataPropertyName = "prd_item";
+            this.colprd_item_merge.HeaderText = "物料編號";
+            this.colprd_item_merge.Name = "colprd_item_merge";
+            this.colprd_item_merge.ReadOnly = true;
+            this.colprd_item_merge.Width = 360;
+            // 
+            // colprd_qty_merge
+            // 
+            this.colprd_qty_merge.DataPropertyName = "prd_qty";
+            this.colprd_qty_merge.HeaderText = "生產數量";
+            this.colprd_qty_merge.Name = "colprd_qty_merge";
+            this.colprd_qty_merge.ReadOnly = true;
+            this.colprd_qty_merge.Width = 120;
+            // 
+            // btnAddMergeMo
+            // 
+            this.btnAddMergeMo.Location = new System.Drawing.Point(845, 13);
+            this.btnAddMergeMo.Name = "btnAddMergeMo";
+            this.btnAddMergeMo.Size = new System.Drawing.Size(100, 27);
+            this.btnAddMergeMo.TabIndex = 4;
+            this.btnAddMergeMo.Text = "添加";
+            this.btnAddMergeMo.UseVisualStyleBackColor = true;
+            this.btnAddMergeMo.Click += new System.EventHandler(this.btnAddMergeMo_Click);
+            // 
+            // lblGoodsMerge
+            // 
+            this.lblGoodsMerge.AutoSize = true;
+            this.lblGoodsMerge.Location = new System.Drawing.Point(297, 16);
+            this.lblGoodsMerge.Name = "lblGoodsMerge";
+            this.lblGoodsMerge.Size = new System.Drawing.Size(76, 16);
+            this.lblGoodsMerge.TabIndex = 5;
+            this.lblGoodsMerge.Text = "物料編號:";
+            // 
+            // lblprd_qty_merge
+            // 
+            this.lblprd_qty_merge.AutoSize = true;
+            this.lblprd_qty_merge.Location = new System.Drawing.Point(647, 16);
+            this.lblprd_qty_merge.Name = "lblprd_qty_merge";
+            this.lblprd_qty_merge.Size = new System.Drawing.Size(76, 16);
+            this.lblprd_qty_merge.TabIndex = 6;
+            this.lblprd_qty_merge.Text = "生產數量:";
+            // 
+            // btnDeleteMergeMo
+            // 
+            this.btnDeleteMergeMo.Location = new System.Drawing.Point(970, 13);
+            this.btnDeleteMergeMo.Name = "btnDeleteMergeMo";
+            this.btnDeleteMergeMo.Size = new System.Drawing.Size(100, 27);
+            this.btnDeleteMergeMo.TabIndex = 7;
+            this.btnDeleteMergeMo.Text = "刪除";
+            this.btnDeleteMergeMo.UseVisualStyleBackColor = true;
+            this.btnDeleteMergeMo.Click += new System.EventHandler(this.btnDeleteMergeMo_Click);
             // 
             // frmPrdSchedule
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1233, 699);
+            this.ClientSize = new System.Drawing.Size(1233, 742);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
             this.Name = "frmPrdSchedule";
@@ -2341,7 +2329,7 @@
             this.panel11.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAndSingle)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMoMerge)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -2368,8 +2356,6 @@
             this.tp1Mer.ResumeLayout(false);
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
-            this.panel10.ResumeLayout(false);
-            this.panel10.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2445,21 +2431,9 @@
         private System.Windows.Forms.TextBox txtTotalQty;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtPrd_id_ref;
-        private System.Windows.Forms.RadioButton rdbSearch2;
-        private System.Windows.Forms.RadioButton rdbSearch1;
-        private System.Windows.Forms.Button btnMo_search;
         private System.Windows.Forms.Label lblMo_search;
-        private System.Windows.Forms.TextBox txtMo_search;
-        private System.Windows.Forms.DataGridView dgvAndSingle;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colprd_mo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colprd_item;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colQty;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrd_date;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrd_mo_sub;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrd_qty_sub;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colSer_qo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrd_id_ref;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPrd_item_sub;
+        private System.Windows.Forms.TextBox txtMoMerge;
+        private System.Windows.Forms.DataGridView dgvMoMerge;
         private System.Windows.Forms.Label lblDifficulty_level;
         private System.Windows.Forms.Label lblSpeed_lever;
         private System.Windows.Forms.TextBox txtDifficulty_level;
@@ -2514,7 +2488,6 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.Button btnFindMo;
         private System.Windows.Forms.Panel panel9;
-        private System.Windows.Forms.Panel panel10;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ToolStripButton btnBrowse;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
@@ -2545,6 +2518,9 @@
         private System.Windows.Forms.ComboBox cmbDifficultyLevel;
         private System.Windows.Forms.TextBox txtActual_qty;
         private System.Windows.Forms.Label lblActual_qty;
+        private System.Windows.Forms.Label lblMakeColor;
+        private System.Windows.Forms.ComboBox cmbMakeColor;
+        private System.Windows.Forms.Label lblBakeTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
@@ -2565,5 +2541,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column14;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column15;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column16;
+        private System.Windows.Forms.ComboBox cmbGoodsMerge;
+        private System.Windows.Forms.ToolStripButton btnMerge;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.TextBox txtPrd_qty_merge;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colprd_mo_merge;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colprd_item_merge;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colprd_qty_merge;
+        private System.Windows.Forms.Button btnAddMergeMo;
+        private System.Windows.Forms.Label lblGoodsMerge;
+        private System.Windows.Forms.Label lblprd_qty_merge;
+        private System.Windows.Forms.Button btnDeleteMergeMo;
     }
 }

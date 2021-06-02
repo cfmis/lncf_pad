@@ -21,10 +21,15 @@ namespace cf_pad.CLS
         {
             DataTable dtDept = new DataTable();
 
-            string strSql = @" select int9loc,int9loc+'--'+int9desc AS int9desc,wip_dep from int09 ";
+            string strSql = @" select int9loc,int9loc+'--'+int9desc AS int9desc,wip_dep from int09 Where area='JX' ";
 
             dtDept = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
-            dtDept.Rows.Add();
+            DataRow newRow;
+            newRow = dtDept.NewRow();
+            newRow["int9loc"] = "";
+            newRow["int9desc"] = "";
+            newRow["wip_dep"] = "";
+            dtDept.Rows.Add(newRow);
             dtDept.DefaultView.Sort = "int9loc";
             return dtDept;
         }
@@ -38,9 +43,7 @@ namespace cf_pad.CLS
             DataTable dtworktype = new DataTable();
 
             string strSql = @" select work_type_id,rtrim(work_type_desc) as work_type_desc from work_type ";
-
             dtworktype = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
-
             return dtworktype;
         }
 
@@ -959,7 +962,16 @@ namespace cf_pad.CLS
 
         public static DataTable getJobType(string dep)
         {
-            string strSql = "Select job_type,RTRIM(job_type)+'--'+RTRIM(job_desc) AS job_desc From job_type Where dep='" + dep + "'" + " ORDER BY job_type";
+            string strSql = "Select job_type,RTRIM(job_type)+'--'+RTRIM(job_desc) AS job_desc" +
+                " From job_type Where job_type>=''";
+            if (dep != "")
+            {
+                if (dep.Length == 3 && dep.Substring(0, 3) == "J07")
+                    strSql += " AND Substring(dep,1,3)='" + dep + "'";
+                else
+                    strSql += " AND dep='" + dep + "'";
+            }
+            strSql += " ORDER BY job_type";
             DataTable dtJobType = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
             DataRow dr2 = dtJobType.NewRow();
             dr2[0] = ""; //通过索引赋值
@@ -1029,6 +1041,51 @@ namespace cf_pad.CLS
             if (dtWorkCode.Rows.Count > 0)
                 result = dtWorkCode.Rows[0]["machine_id"].ToString();
             return result;
+        }
+
+        public static string getDepJx(string JxDep)
+        {
+            string result = "";
+            string strSql = " SELECT * From int09 a Where int9loc>=''";
+            strSql += " And int9loc='" + JxDep + "'";
+            strSql += " And area='JX'";
+            DataTable dt = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
+            if (dt.Rows.Count > 0)
+                result = dt.Rows[0]["wip_dep"].ToString().Trim();
+            return result;
+        }
+        public static int SaveMergeProductMo(int prd_id,string prd_mo,string prd_item,int prd_qty)
+        {
+            int result = 0;
+            string strSql = "";
+            strSql = "Select prd_id From product_records_mo Where prd_id='" + prd_id + "' And prd_mo='" + prd_mo + "' And prd_item='" + prd_item + "'";
+            DataTable dt = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
+            if (dt.Rows.Count == 0)
+            {
+                strSql += string.Format(@" Insert Into product_records_mo (prd_id,prd_mo,prd_item,prd_qty) Values " +
+                "('{0}','{1}','{2}','{3}')"
+                , prd_id, prd_mo, prd_item, prd_qty);
+            }
+            else
+                strSql += string.Format(@" Update product_records_mo Set prd_qty='{0}' Where " +
+                " prd_id='{1}' And prd_mo='{2}' And prd_item='{3}'"
+                , prd_qty, prd_id, prd_mo, prd_item);
+            result = clsPublicOfPad.ExecuteSqlUpdate(strSql);
+            return result;
+        }
+        public static int DeleteMergeProductMo(int prd_id, string prd_mo, string prd_item)
+        {
+            int result = 0;
+            string strSql = "";
+            strSql = "Delete From product_records_mo Where prd_id='" + prd_id + "' And prd_mo='" + prd_mo + "' And prd_item='" + prd_item + "'";
+            result = clsPublicOfPad.ExecuteSqlUpdate(strSql);
+            return result;
+        }
+        public static DataTable LoadMergeProductMo(int prd_id)
+        {
+            string strSql = "Select a.* From product_records_mo a Where prd_id='" + prd_id + "'";
+            DataTable dtMerge = clsPublicOfPad.ExecuteSqlReturnDataTable(strSql);
+            return dtMerge;
         }
     }
 }

@@ -99,11 +99,12 @@ namespace cf_pad.Forms
             //txtBarCode.Focus();
 
             Font a = new Font("GB2312", 12);//GB2312为字体名称，1为字体大小dataGridView1.Font = a;
-            dgvAndSingle.Font = a;
+            dgvMoMerge.Font = a;
             dgvDetails.Font = a;
             dgvDetails.AutoGenerateColumns = false;
             dgvWorker.Font = a;
             dgvWorker.AutoGenerateColumns = false;
+            dgvMoMerge.AutoGenerateColumns = false;
             if (cmbProductDept.SelectedValue.ToString() == "J01")
                 lblStandard_per_qty.Text = "標準時產能";
 
@@ -145,9 +146,12 @@ namespace cf_pad.Forms
                     {
                         if (userid_part == "BLP")
                             cmbProductDept.SelectedValue = "J07";
+                        else if (userid_part == "BLK")
+                            cmbProductDept.SelectedValue = "128";
                     }
                 }
             }
+            getWipDep();//獲取對應的Wip部門
             //初始化工作類型
             cmbWorkType.DataSource = dtWork_type;
             cmbWorkType.DisplayMember = "work_type_desc";
@@ -158,6 +162,14 @@ namespace cf_pad.Forms
             cmbOrder_class.Items.Add("白班");
             cmbOrder_class.Items.Add("夜班");
             cmbOrder_class.Text = "白班";
+            //綁定噴油的顏色做法
+            List<dynamic> listMakeColor = new List<dynamic>();
+            listMakeColor.Add(new { text = "", value = "" });
+            listMakeColor.Add(new { text = "L--叻架", value = "L" });
+            listMakeColor.Add(new { text = "Y--顏色", value = "Y" });
+            cmbMakeColor.DataSource = listMakeColor;
+            cmbMakeColor.DisplayMember = "text";
+            cmbMakeColor.ValueMember = "value";
 
             SetControlVisible();//設置控件可見
 
@@ -189,34 +201,41 @@ namespace cf_pad.Forms
                 cmbGroup.DisplayMember = "work_group";
                 cmbGroup.ValueMember = "work_group";
             }
-            if (dep == "J07")
+            if (dep == "J07" || dep=="128")
                 cmbWorkType.SelectedValue = "A02";
             else
                 cmbWorkType.SelectedValue = "A01";
-
-
+            if(dep=="128")
+                txtMachine.Text = "LNN-01";
             getJobType();
             //getJobTimes();//噴油排板次數
         }
         private void getJobType()
         {
-            string dep = cmbProductDept.SelectedValue.ToString().Trim();
+            string dep = cmbProductDept.SelectedValue != null ? cmbProductDept.SelectedValue.ToString().Trim() : "";
+            if (_userid == "BLP01")
+                dep = "J0701";
+            else if (_userid == "BLP02")
+                dep = "J0702";
+            else if (_userid == "BLP03")
+                dep = "J0703";
             DataTable dtJobType = clsProductionSchedule.getJobType(dep);
             cmbJob_type.DataSource = dtJobType;
             cmbJob_type.DisplayMember = "job_desc";
             cmbJob_type.ValueMember = "job_type";
+            
         }
         //噴油排板的次數
         private void getJobTimes()
         {
             if (txtWipDep.Text.Trim() == "510")
             {
-                string dep="";
-                string jobType=(cmbJob_type.SelectedValue != null ? cmbJob_type.SelectedValue.ToString() : "");
-                if (jobType == "J0702" || jobType == "J0703")
-                    dep = "5101";
-                else
-                    dep = "5102";
+                string dep= "5101";
+                //string jobType=(cmbJob_type.SelectedValue != null ? cmbJob_type.SelectedValue.ToString() : "");
+                //if (jobType == "J0702" || jobType == "J0703")
+                //    dep = "5101";
+                //else
+                //    dep = "5102";
                 DataTable dtJobTimes = clsProductionSchedule.getJobType(dep);
                 cmbDifficultyLevel.DataSource = dtJobTimes;
                 cmbDifficultyLevel.DisplayMember = "job_desc";
@@ -225,7 +244,7 @@ namespace cf_pad.Forms
         }
         private void getWipDep()
         {
-            txtWipDep.Text = clsPublicOfPad.getDepJx(cmbProductDept.SelectedValue.ToString().Trim(), "");
+            txtWipDep.Text = clsProductionSchedule.getDepJx(cmbProductDept.SelectedValue.ToString().Trim());
         }
 
         //提取噴油的排板規格、標準
@@ -251,23 +270,42 @@ namespace cf_pad.Forms
         }
         private void txtmo_id_Leave(object sender, EventArgs e)
         {
+            SetGoodsComboxValue(txtmo_id.Text.Trim(),cmbGoods_id);
+        }
+
+        //根據輸入的制單編號，賦值給物料編號下拉框
+        private void SetGoodsComboxValue(string Prd_mo,ComboBox cmb)
+        {
             cmbGoods_id.Text = "";
             txtgoods_desc.Text = "";
-            cmbGoods_id.Items.Clear();
+            cmb.Items.Clear();
 
             string dep = txtWipDep.Text.Trim();//cmbProductDept.SelectedValue.ToString();
             if (dep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
                 dep = "102";
-            dtMo_item = clsProductionSchedule.getItemByMo(txtmo_id.Text.Trim(), dep);
-            if (dtMo_item.Rows.Count > 0)
+            for (int k = 1; k <= 2; k++)
             {
-                for (int i = 0; i < dtMo_item.Rows.Count; i++)
+                dtMo_item = clsProductionSchedule.getItemByMo(Prd_mo, dep);
+                if (dtMo_item.Rows.Count > 0)
                 {
-                    cmbGoods_id.Items.Add(dtMo_item.Rows[i]["goods_id"].ToString());
+                    for (int i = 0; i < dtMo_item.Rows.Count; i++)
+                    {
+                        cmb.Items.Add(dtMo_item.Rows[i]["goods_id"].ToString());
+                    }
+                    cmb.SelectedIndex = 0;
+                    break;
                 }
+                if (dep == "128")
+                    dep = "108";
+                else if (dep == "322")
+                    dep = "302";
+                else if (dep == "125")
+                    dep = "105";
+                else
+                    break;
+                txtWipDep.Text = dep;
             }
         }
-
         //獲取制單編號資料，并綁定物料編號
         private void GetMo_itme(string item)
         {
@@ -297,20 +335,21 @@ namespace cf_pad.Forms
             string strSql = "";
             if (con_type != 8)
             {
-                //strSql += "Select aa.*,bb.name AS prd_item_cdesc From ( ";
-                strSql += " Select Top 100000 a.*,rtrim(b.work_type_desc) as work_type_desc,c.prd_worker AS prd_worker_d,a.prd_item AS prd_item_cdesc " +
+                //strSql += "Select aa.*,bb.name AS prd_item_cdesc From ( ";,c.prd_worker AS prd_worker_d
+                strSql += " Select Top 100000 a.*,rtrim(b.work_type_desc) as work_type_desc,a.prd_item AS prd_item_cdesc " +
                 ",d.job_desc,e.job_desc AS row_times" +
+                ",dbo.Fn_getProductWorker(a.prd_id) AS prd_worker_d " +
                 " From product_records a with(nolock) " +
                 " Left join work_type b with(nolock) on a.prd_work_type=b.work_type_id " +
-                " Left Join product_records_worker c with(nolock) On a.prd_id=c.prd_id " +
+                //" Left Join product_records_worker c with(nolock) On a.prd_id=c.prd_id " +
                 " Left Join job_type d with(nolock) On a.job_type=d.job_type "+
                 " Left Join job_type e with(nolock) On a.difficulty_level=e.job_type ";
                 strSql += " Where a.prd_dep = " + "'" + cmbProductDept.SelectedValue.ToString() + "'";
                 //,d.name AS prd_item_cdesc
                 //+ "' And d.within_code='" + within_code
                 //" Inner Join " + remote_db + "it_goods d with(nolock) On a.prd_item=d.id COLLATE chinese_taiwan_stroke_CI_AS";
-                if (cmbProductDept.SelectedValue.ToString() == "302")//如果是合金部，則不顯示選貨的記錄
-                    strSql += " And a.prd_work_type <> " + "'" + "A03" + "'";
+                //if (cmbProductDept.SelectedValue.ToString() == "302")//如果是合金部，則不顯示選貨的記錄
+                //    strSql += " And a.prd_work_type <> " + "'" + "A03" + "'";
                 if (con_type == 1)//是否查找當日未完成標識
                 {
                     strSql += " AND a.prd_id='" + record_id + "'";
@@ -394,16 +433,17 @@ namespace cf_pad.Forms
         //重新填入查找到的記錄
         private void fill_exist_record(int index)
         {
-            record_id = Convert.ToInt32(dtProductionRecordslist.Rows[index]["prd_id"].ToString());//更新記錄序號
-            dteProdcutDate.Text = dtProductionRecordslist.Rows[index]["prd_date"].ToString();
-            cmbOrder_class.Text = dtProductionRecordslist.Rows[index]["prd_class"].ToString();
-            cmbGroup.Text = dtProductionRecordslist.Rows[index]["prd_group"].ToString();
-            mktPrdPdate.Text = dtProductionRecordslist.Rows[index]["prd_pdate"].ToString();
-            txtMachine.Text = dtProductionRecordslist.Rows[index]["prd_machine"].ToString();
-            txtProductNo.Text = dtProductionRecordslist.Rows[index]["prd_worker"].ToString();
-            cmbWorkType.Text = dtProductionRecordslist.Rows[index]["work_type_desc"].ToString().Trim();
-            string start_time = dtProductionRecordslist.Rows[index]["prd_start_time"].ToString();
-            string end_time = dtProductionRecordslist.Rows[index]["prd_end_time"].ToString();
+            DataRow dr = dtProductionRecordslist.Rows[index];
+            record_id = Convert.ToInt32(dr["prd_id"].ToString());//更新記錄序號
+            dteProdcutDate.Text = dr["prd_date"].ToString();
+            cmbOrder_class.Text = dr["prd_class"].ToString();
+            cmbGroup.Text = dr["prd_group"].ToString();
+            mktPrdPdate.Text = dr["prd_pdate"].ToString();
+            txtMachine.Text = dr["prd_machine"].ToString();
+            txtProductNo.Text = dr["prd_worker"].ToString();
+            cmbWorkType.Text = dr["work_type_desc"].ToString().Trim();
+            string start_time = dr["prd_start_time"].ToString();
+            string end_time = dr["prd_end_time"].ToString();
             dtpStart.Value = Convert.ToDateTime("2014/01/01 " + start_time);
             dtpEnd.Value = Convert.ToDateTime("2014/01/01 " + end_time);
             if (start_time=="" && end_time == "")
@@ -417,37 +457,38 @@ namespace cf_pad.Forms
                     else
                          if (start_time == "" && end_time != "")
                              lblMoStatus.Text = "生產中但未完成：沒有開始時間，請錄入完整相關資料!";
-            txtNormal_work.Text = (dtProductionRecordslist.Rows[index]["prd_normal_time"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["prd_normal_time"].ToString() : "");
-            txtAdd_work.Text = (dtProductionRecordslist.Rows[index]["prd_ot_time"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["prd_ot_time"].ToString() : "");
-            txtRow_qty.Text = (dtProductionRecordslist.Rows[index]["line_num"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["line_num"].ToString() : "");
-            txtPer_Convert_qty.Text = (dtProductionRecordslist.Rows[index]["hour_run_num"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["hour_run_num"].ToString() : "");
-            txtper_Standrad_qty.Text = (dtProductionRecordslist.Rows[index]["hour_std_qty"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["hour_std_qty"].ToString() : "");
-            txtPrd_qty.Text = (dtProductionRecordslist.Rows[index]["prd_qty"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["prd_qty"].ToString() : "");
-            txtReq_prd_qty.Text = (dtProductionRecordslist.Rows[index]["req_prd_qty"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["req_prd_qty"].ToString() : "");
-            txtprd_weg.Text = (dtProductionRecordslist.Rows[index]["prd_weg"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["prd_weg"].ToString() : "");
-            txtkgPCS.Text = (dtProductionRecordslist.Rows[index]["kg_pcs"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["kg_pcs"].ToString() : "");
-            txtActual_qty.Text = (dtProductionRecordslist.Rows[index]["actual_qty"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["actual_qty"].ToString() : "");
-            txtDifficulty_level.Text = dtProductionRecordslist.Rows[index]["difficulty_level"].ToString();
+            txtNormal_work.Text = (dr["prd_normal_time"].ToString() != "0" ? dr["prd_normal_time"].ToString() : "");
+            txtAdd_work.Text = (dr["prd_ot_time"].ToString() != "0" ? dr["prd_ot_time"].ToString() : "");
+            txtRow_qty.Text = (dr["line_num"].ToString() != "0" ? dr["line_num"].ToString() : "");
+            txtPer_Convert_qty.Text = (dr["hour_run_num"].ToString() != "0" ? dr["hour_run_num"].ToString() : "");
+            txtper_Standrad_qty.Text = (dr["hour_std_qty"].ToString() != "0" ? dr["hour_std_qty"].ToString() : "");
+            txtPrd_qty.Text = (dr["prd_qty"].ToString() != "0" ? dr["prd_qty"].ToString() : "");
+            txtReq_prd_qty.Text = (dr["req_prd_qty"].ToString() != "0" ? (Convert.ToInt32(dr["req_prd_qty"]) > 0 ? dr["req_prd_qty"].ToString() : "") : "");
+            txtprd_weg.Text = (dr["prd_weg"].ToString() != "0" ? dr["prd_weg"].ToString() : "");
+            txtkgPCS.Text = (dr["kg_pcs"].ToString() != "0" ? dr["kg_pcs"].ToString() : "");
+            txtActual_qty.Text = (dr["actual_qty"].ToString() != "0" ? dr["actual_qty"].ToString() : "");
+            txtDifficulty_level.Text = dr["difficulty_level"].ToString();
             getJobTimes();//綁定噴油的排板、噴油次數，再賦值：
             cmbDifficultyLevel.SelectedValue = txtDifficulty_level.Text;
-            txtMatItem.Text = dtProductionRecordslist.Rows[index]["mat_item"].ToString();
-            txtMatDesc.Text = dtProductionRecordslist.Rows[index]["mat_item_desc"].ToString();
-            txtMatLot.Text = dtProductionRecordslist.Rows[index]["mat_item_lot"].ToString();
-            dtpReqEnd.Text = dtProductionRecordslist.Rows[index]["prd_req_time"].ToString();//預計完成時間，用每次計算的時間
-            txtToDep.Text = dtProductionRecordslist.Rows[index]["to_dep"].ToString();
-            txtPrd_Run_qty.Text = dtProductionRecordslist.Rows[index]["prd_run_qty"].ToString();
-            txtWork_code.Text = dtProductionRecordslist.Rows[index]["work_code"].ToString();
+            txtMatItem.Text = dr["mat_item"].ToString();
+            txtMatDesc.Text = dr["mat_item_desc"].ToString();
+            txtMatLot.Text = dr["mat_item_lot"].ToString();
+            cmbMakeColor.SelectedValue = dr["mat_item_lot"] != null ? dr["mat_item_lot"].ToString() : "";
+            dtpReqEnd.Text = dr["prd_req_time"].ToString();//預計完成時間，用每次計算的時間
+            txtToDep.Text = dr["to_dep"].ToString();
+            txtPrd_Run_qty.Text = dr["prd_run_qty"].ToString();
+            txtWork_code.Text = dr["work_code"].ToString();
             cmbWorkCode.SelectedValue = txtWork_code.Text;
-            txtSpeed_lever.Text = dtProductionRecordslist.Rows[index]["speed_lever"].ToString();
-            txtPack_num.Text = (dtProductionRecordslist.Rows[index]["pack_num"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["pack_num"].ToString() : "");
-            txtStart_run.Text = (dtProductionRecordslist.Rows[index]["start_run"].ToString() !="0" ? dtProductionRecordslist.Rows[index]["start_run"].ToString():"0");
-            txtEnd_run.Text = (dtProductionRecordslist.Rows[index]["end_run"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["end_run"].ToString() : "");
-            txtSample_no.Text = (dtProductionRecordslist.Rows[index]["sample_no"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["sample_no"].ToString() : "");
-            txtSample_weg.Text = (dtProductionRecordslist.Rows[index]["sample_weg"].ToString() != "0" ? dtProductionRecordslist.Rows[index]["sample_weg"].ToString() : "");
-            cmbJob_type.SelectedValue = dtProductionRecordslist.Rows[index]["job_type"].ToString();
-            txtWork_class.Text = dtProductionRecordslist.Rows[index]["work_class"].ToString();
-            txtPrd_id_ref.Text = dtProductionRecordslist.Rows[index]["prd_id_ref"].ToString();
-            if (txtDifficulty_level.Text.Trim() == "" && dteProdcutDate.Text == "302")//合金部難度設定為1
+            txtSpeed_lever.Text = dr["speed_lever"].ToString();
+            txtPack_num.Text = (dr["pack_num"].ToString() != "0" ? dr["pack_num"].ToString() : "");
+            txtStart_run.Text = (dr["start_run"].ToString() !="0" ? dr["start_run"].ToString():"0");
+            txtEnd_run.Text = (dr["end_run"].ToString() != "0" ? dr["end_run"].ToString() : "");
+            txtSample_no.Text = (dr["sample_no"].ToString() != "0" ? dr["sample_no"].ToString() : "");
+            txtSample_weg.Text = (dr["sample_weg"].ToString() != "0" ? dr["sample_weg"].ToString() : "");
+            cmbJob_type.SelectedValue = dr["job_type"].ToString();
+            txtWork_class.Text = dr["work_class"].ToString();
+            txtPrd_id_ref.Text = dr["prd_id_ref"].ToString();
+            if (txtDifficulty_level.Text.Trim() == "" && dteProdcutDate.Text == "322")//合金部難度設定為1
                 txtDifficulty_level.Text = "1";
             loadProductWorker();
             setProdDate();//自動設定生產日期為當前日期
@@ -583,6 +624,7 @@ namespace cf_pad.Forms
             cmbGroup.Text = "";
             txtmo_id.Text = "";
             cmbGoods_id.Text = "";
+            record_id = -1;
             ClearPartOfText();
         }
         // 清空部份值
@@ -624,6 +666,7 @@ namespace cf_pad.Forms
             cmbJob_type.SelectedValue = "";
             cmbWorkCode.SelectedValue = "";
             lblMoStatus.Text = "未定義";
+            cmbMakeColor.SelectedValue = "";
             //dgvWorker.DataSource = null;
             loadProductWorker();
         }
@@ -652,8 +695,8 @@ namespace cf_pad.Forms
         //輸入格式驗證
         private bool valid_data()
         {
-            if (chk_imput_status() == true)//檢查記錄是否已傳入新系統
-                return false;
+            //if (chk_imput_status() == true)//檢查記錄是否已傳入新系統
+            //    return false;
             if (cmbProductDept.Text == "")
             {
                 MessageBox.Show("生產部門不能為空,請重新輸入!");
@@ -1219,26 +1262,18 @@ namespace cf_pad.Forms
                 cmbGoods_id.Text = item;//物料編號
                 txtgoods_desc.Text = GetItemDesc(item);//獲取物料描述
                 get_total_prd_qty();//顯示單的總完成數量
-                txtgoods_desc.Focus();
+                ////txtgoods_desc.Focus();
             }
             txtBarCode.Focus();
         }
         //獲取物料描述
         private string GetItemDesc(string item)
         {
-            string desc="";
-            DataTable dtitem = new DataTable();
-            try
+            string desc = "";
+            DataTable dtitem = clsProductionSchedule.GetItemDesc(item);
+            if (dtitem.Rows.Count > 0)
             {
-                dtitem = clsProductionSchedule.GetItemDesc(item);
-                if (dtitem.Rows.Count > 0)
-                {
-                    desc = dtitem.Rows[0]["name"].ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                desc = dtitem.Rows[0]["name"].ToString();
             }
             return desc;
         }
@@ -1378,25 +1413,35 @@ namespace cf_pad.Forms
             else
                 barcode = txtBarCode.Text.Trim();
 
-            DataTable dtBarCode = clsPublicOfPad.BarCodeToItem(barcode);
+            DataTable dtBarCode = clsPublicOfPad.BarCodeToItem(barcode);//從生產計劃中提取的條形碼
             txtBarCode.Text = "";
             if (dtBarCode.Rows.Count > 0)
             {
-                string barcode_type = dtBarCode.Rows[0]["barcode_type"].ToString();
-                if (barcode_type == "2")//從生產計劃中提取的條形碼
+                DataRow dr = dtBarCode.Rows[0];
+                string barcode_type = dr["barcode_type"].ToString();
+                if (barcode_type == "2")
                 {
-                    txtFindMo.Text = dtBarCode.Rows[0]["mo_id"].ToString();
-                    txtBarCodeItem.Text = dtBarCode.Rows[0]["goods_id"].ToString();
-                    txtWipDep.Text = dtBarCode.Rows[0]["wp_id"].ToString();
+                    txtFindMo.Text = dr["mo_id"].ToString();
+                    txtBarCodeItem.Text = dr["goods_id"].ToString();
+                    txtWipDep.Text = dr["wp_id"].ToString();
                     cmbProductDept.SelectedValue = clsPublicOfPad.getDepJx("", txtWipDep.Text);
-                    getJobType();//查找部門對應的工種
-                    getWorkCodeList();//主要是提取噴油部門的排板標準數
-                    SetControlVisible();//設置控件可見
-                    getMoDataSource();//從生產表或排期表或流程中獲取記錄
-                    fill_txt_kg_pcs();//更新每Kg對應數量
-                    //loadProductWorker();//獲取該記錄號的生產工號
-                    edit_type = "Y";//控件為編輯狀態
-                    
+                    if (tabControl1.SelectedIndex != 2)//編輯界面
+                    {
+                        getJobType();//查找部門對應的工種
+                        getWorkCodeList();//主要是提取噴油部門的排板標準數
+                        SetControlVisible();//設置控件可見
+                        getMoDataSource();//從生產表或排期表或流程中獲取記錄
+                        fill_txt_kg_pcs();//更新每Kg對應數量
+                                          //loadProductWorker();//獲取該記錄號的生產工號
+                        edit_type = "Y";//控件為編輯狀態
+                    }
+                    else//合併生產界面
+                    {
+                        txtMoMerge.Text= dr["mo_id"].ToString();
+                        SetGoodsComboxValue(txtMoMerge.Text, cmbGoodsMerge);
+                        SetMergeGoodsProductQty(cmbGoodsMerge.Text.Trim());
+                        SaveMergeProductMo();
+                    }
                 }
             }
             txtBarCode.Focus();
@@ -1432,13 +1477,14 @@ namespace cf_pad.Forms
 
 
                     fill_textbox(rowNo);//填充各種控件
+
                 }
                 
             }
             else
             {
-                ClearPartOfText();
                 record_id = -1;
+                ClearPartOfText();
                 string goods_item = "";
                 //如果在生產的記錄中找不到記錄,則在安排的計劃中查找
                 DataTable dtArrange = clsProductionSchedule.getDataFromArrangeByMo(cmbProductDept.SelectedValue.ToString(), txtFindMo.Text.Trim(), txtBarCodeItem.Text);
@@ -1508,7 +1554,9 @@ namespace cf_pad.Forms
             if (dtItem.Rows.Count > 0)
                 prd_qty = dtItem.Rows[0]["prod_qty"] != "" ? Convert.ToInt32(dtItem.Rows[0]["prod_qty"]) : 0;
             get_total_prd_qty();//獲取總完成數量
-            txtReq_prd_qty.Text = (prd_qty - (txtTotalQty.Text != "" ? Convert.ToInt32(txtTotalQty.Text) : 0)).ToString();
+            int ReqPrdQty = 0;
+            ReqPrdQty = prd_qty - (txtTotalQty.Text != "" ? Convert.ToInt32(txtTotalQty.Text) : 0);
+            txtReq_prd_qty.Text = ReqPrdQty <= 0 ? "" : ReqPrdQty.ToString();
         }
         //設置噴油部默認的排板標準數
         private void getDefaultWorkCode()
@@ -1517,8 +1565,8 @@ namespace cf_pad.Forms
             if (txtWipDep.Text.Trim() == "510")
             {
                 string jobType = cmbJob_type.SelectedValue != null ? cmbJob_type.SelectedValue.ToString().Trim() : "";
-                if (jobType == "J0702" || jobType == "J0703")
-                {
+                //if (jobType == "J0702" || jobType == "J0703")
+                //{
                     string sizeId1 = "", sizeId2 = "";
                     sizeId1 = cmbGoods_id.Text.Trim().Length >= 18 ? cmbGoods_id.Text.Trim().Substring(11, 3) : "";
                     sizeId2 = sizeId1;
@@ -1528,7 +1576,7 @@ namespace cf_pad.Forms
 
                     getWorkCodeStd();
                     countWorkCodeQty();
-                }
+                //}
             }
             else
             {
@@ -1631,7 +1679,22 @@ namespace cf_pad.Forms
             bool t1, t2;
             t1 = true;
             t2 = true;
-            string prdDep=cmbProductDept.SelectedValue.ToString().Trim();
+            lblPrd_Run_qty.Visible = true;
+            txtPrd_Run_qty.Visible = true;
+            lblWork_code.Visible = true;
+            txtWork_code.Visible = true;
+            cmbWorkCode.Visible = true;
+            lblDifficulty_level.Visible = true;
+            lblMachine.Visible = true;
+            txtMachine.Visible = true;
+            lblRow_qty.Visible = true;
+            txtRow_qty.Visible = true;
+            lblMakeColor.Visible = false;
+            cmbMakeColor.Visible = false;
+            lblBakeTime.Visible = false;
+            lblBakeTime.Location = new Point(1092, 76);
+            panel5.Height = 102;
+            string prdDep = cmbProductDept.SelectedValue != null ? cmbProductDept.SelectedValue.ToString().Trim() : "";
             if (prdDep == "J07")
             {
                 t1 = false;
@@ -1644,11 +1707,41 @@ namespace cf_pad.Forms
                 cmbDifficultyLevel.Location = new Point(366, 37);
                 lblActual_qty.Location = new Point(592, 44);
                 txtActual_qty.Location = new Point(636, 37);
+                lblMakeColor.Location = new Point(17, 76);
+                cmbMakeColor.Location = new Point(92, 69);
+                lblEnd_run.Location = new Point(287, 76); 
+                txtEnd_run.Location = new Point(366, 69);
+                lblBakeTime.Location = new Point(560, 76);
                 lblWork_code.Text = "選板規格:";
                 lblRow_qty.Text = "每板粒數:";
                 lblPrd_Run_qty.Text = "實際板數:";
                 lblDifficulty_level.Text = "次數:";
                 lblActual_qty.Text = "尾數:";
+                lblEnd_run.Text = "烘烤時間:";
+                lblEnd_run.Visible = t2;
+                txtEnd_run.Visible = t2;
+                lblMakeColor.Visible = t2;
+                cmbMakeColor.Visible = t2;
+                lblBakeTime.Visible = t2;
+            }
+            else if(prdDep=="128")
+            {
+                t1 = false;
+                t2 = false;
+                lblPrd_Run_qty.Visible = false;
+                txtPrd_Run_qty.Visible = false;
+                lblWork_code.Visible = false;
+                txtWork_code.Visible = false;
+                cmbWorkCode.Visible = false;
+                lblDifficulty_level.Visible = false;
+                lblMachine.Visible = false;
+                txtMachine.Visible = false;
+                lblRow_qty.Visible = false;
+                txtRow_qty.Visible = false;
+                lblEnd_run.Visible = t1;
+                txtEnd_run.Visible = t1;
+                panel5.Height = 38;
+                panel8.Height = 100;
             }
             else
             {
@@ -1662,11 +1755,16 @@ namespace cf_pad.Forms
                 cmbDifficultyLevel.Location = new Point(636, 6);
                 lblActual_qty.Location = new Point(820, 11);
                 txtActual_qty.Location = new Point(875, 6);
+                lblEnd_run.Location = new Point(287, 76);
+                txtEnd_run.Location = new Point(366, 69);
                 lblWork_code.Text = "標準編碼:";
                 lblRow_qty.Text = "每行(碑)數:";
                 lblPrd_Run_qty.Text = "實際碑數:";
                 lblDifficulty_level.Text = "難度";
                 lblActual_qty.Text = "實際數量:";
+                lblEnd_run.Text = "結束碑數:";
+                lblEnd_run.Visible = t1;
+                txtEnd_run.Visible = t1;
             }
             //lblDifficulty_level.Visible = t1;
             txtDifficulty_level.Visible = t1;
@@ -1676,8 +1774,6 @@ namespace cf_pad.Forms
             lblStandard_per_qty.Visible = t1;
             txtper_Standrad_qty.Visible = t1;
             lblWork_class.Visible = t1;
-            lblEnd_run.Visible = t1;
-            txtEnd_run.Visible = t1;
             lblStart_run.Visible = t1;
             txtStart_run.Visible = t1;
             txtWork_code.Visible = t1;
@@ -1685,40 +1781,7 @@ namespace cf_pad.Forms
             lblActual_qty.Visible = t2;
             txtActual_qty.Visible = t2;
             panel12.Visible = t1;
-            if (prdDep=="102")
-            {
-                t1 = true;
-                t2 = false;
-
-                //lblStart_run.Location = new Point(5, 176);//開始碑數
-                //txtStart_run.Location = new Point(59, 152);//開始碑數
-                //lblEnd_run.Location = new Point(372, 176);//結束碑數
-                //txtEnd_run.Location = new Point(432, 152);//結束碑數
-                //lblPrd_Run_qty.Location = new Point(5, 249);//實際碑數
-                //txtPrd_Run_qty.Location = new Point(59, 225);//實際碑數
-                //lblWork_code.Location = new Point(5, 373);//標準編碼
-                //txtWork_code.Location = new Point(59, 364);//標準編碼
-                //lblDifficulty_level.Location = new Point(5, 318);
-                //txtDifficulty_level.Location = new Point(59, 294);
-                lblStart_run.Visible = t1;//開始碑數
-                txtStart_run.Visible = t1;//開始碑數
-                lblEnd_run.Visible = t1;//結束碑數
-                txtEnd_run.Visible = t1;//結束碑數
-                lblPrd_Run_qty.Visible = t1;//實際碑數
-                txtPrd_Run_qty.Visible = t1;//實際碑數
-                txtWork_code.Visible = t1;//標準編碼
-                lblWork_code.Visible = t1;//標準編碼
-                lblSpeed_lever.Visible = t2;//檔位
-                txtSpeed_lever.Visible = t2;//檔位
-                //lblJob_type.Visible = t2;//工种
-                //cmbJob_type.Visible = t2;//工种
-                txtWork_class.Visible = t2;//類別
-                lblWork_class.Visible = t2;//類別
-                if (cmbProductDept.SelectedValue.ToString().Trim() == "302")
-                    lblStandard_per_qty.Text = "標準時產能";
-                else
-                    lblStandard_per_qty.Text = "每小時標準數";
-            }
+      
         }
 
         private void count_run_qty()//計算實際碑數  合金部使用
@@ -1798,24 +1861,6 @@ namespace cf_pad.Forms
                 }
                 else if (prdDep == "J01")//合金
                     txtMachine.Text = "N-0";
-                else if (prdDep == "203")//扣部--裝嵌
-                    txtMachine.Text = "K-I-S-";
-                else if (prdDep == "105" || prdDep == "125" || prdDep == "J05")
-                    txtMachine.Text = "LNN-";
-                else if (prdDep == "104" || prdDep == "124")
-                    txtMachine.Text = "LNO-";
-                else if (prdDep == "202")
-                {
-                    if (cmbGroup.Text == "KB01" || cmbGroup.Text == "KF01")
-                        txtMachine.Text = "K-M-A-";
-                    else
-                    {
-                        if (cmbGroup.Text == "KC03")
-                            txtMachine.Text = "K-L-W-";
-                        else
-                            txtMachine.Text = "K-J-E-";
-                    }
-                }
                 txtMachine.SelectionStart = txtMachine.Text.Length;
             }
         }
@@ -1848,89 +1893,7 @@ namespace cf_pad.Forms
             count_alloy_std_hour_qty();
         }
 
-        //檢查是否有已分單的MO
-        private DataTable chkDistMo(int chk_type, string prd_mo_sub, string prd_item_sub)
-        {
-            DataTable dtJoin = new DataTable();
-            try
-            {
-                //獲取分單資料
-                string sql = "";
-                if (chk_type == 1)//檢查是否有已分單的MO
-                {
-                    sql = " Select a.prd_id,a.prd_date,a.prd_mo,a.prd_item,a.prd_id_ref,b.prd_mo_sub,b.prd_item_sub,b.prd_qty_sub " +
-                        " From product_records a with(nolock) " +
-                        " Inner Join product_records_dist_mo b on a.prd_id_ref=b.prd_id_ref " +
-                        " Where a.prd_dep = " + "'" + cmbProductDept.SelectedValue.ToString() + "'" +
-                        " And b.prd_mo_sub = " + "'" + prd_mo_sub + "'" +
-                        " And b.prd_item_sub = " + "'" + prd_item_sub + "'";
-                }
-                else//檢查是否有未完成的MO,若有則提示是否要分單
-                {
-                    if (chk_type == 2)
-                    {
-                        sql = " Select a.prd_id,a.prd_date,a.prd_mo,a.prd_item,a.prd_id_ref " +
-                        " From product_records a with(nolock) " +
-                        " Where a.prd_dep = " + "'" + cmbProductDept.SelectedValue.ToString() + "'" +
-                        " And a.prd_item=" + "'" + prd_item_sub + "'" +
-                        " And a.prd_end_time =" + "'" + "" + "'";
-                    }
-                    else
-                    {
-                        if (chk_type == 3 || chk_type == 4)
-                        {
-                            sql = " Select a.prd_id,a.prd_date,a.prd_mo,a.prd_item,a.prd_qty,a.prd_id_ref,b.prd_mo_sub,b.prd_item_sub,b.prd_qty_sub " +
-                        " From product_records a with(nolock) " +
-                        " Inner Join product_records_dist_mo b on a.prd_id_ref=b.prd_id_ref " +
-                        " Where a.prd_dep = " + "'" + cmbProductDept.SelectedValue.ToString() + "'";
-                            if (chk_type == 3)//按制單編號查詢分單
-                            {
-                                if (rdbSearch1.Checked == true)
-                                    sql += " And a.prd_mo = " + "'" + prd_mo_sub + "'";
-                                if (rdbSearch2.Checked == true)
-                                    sql += " And b.prd_mo_sub = " + "'" + prd_mo_sub + "'";
-                            }
-                            else//按記錄號查詢分單
-                            {
-                                sql += " And a.prd_id_ref = " + "'" + prd_mo_sub + "'";
-                            }
-                        }
-                    }
-                }
-                sql += " Order By a.prd_date desc,a.prd_end_time,a.crtim";
-                dtJoin = clsPublicOfPad.ExecuteSqlReturnDataTable(sql);
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message);
-            }
-            return dtJoin;
-        }
 
-        private void btnMo_search_Click(object sender, EventArgs e)
-        {
-            dgvAndSingle.DataSource = chkDistMo(3, txtMo_search.Text, "");
-        }
-
-        private void rdbSearch1_Click(object sender, EventArgs e)
-        {
-            btnMo_search_Click(sender, e);
-        }
-
-        private void rdbSearch2_Click(object sender, EventArgs e)
-        {
-            btnMo_search_Click(sender, e);
-        }
-
-        private void dgvAndSingle_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex == -1)
-                return;
-            record_id = (int)dgvAndSingle.Rows[e.RowIndex].Cells["colSer_qo"].Value;
-            get_prd_records(9);//按制單編號查詢未完成的記錄
-            //FillGrid();
-
-        }
         //計算每KG對應數量
         private void convert_kg_pcs()
         {
@@ -2064,9 +2027,10 @@ namespace cf_pad.Forms
 
         private void cmbOrder_class_Leave(object sender, EventArgs e)
         {
-            setProdDate();//自動設定生產日期為當前日期
-            count_datetime();//計算生產時間
-            count_alloy_std_hour_qty();//計算合金部的每小時標準碑數
+            //string c1 = cmbOrder_class.Text.ToString();
+            //setProdDate();//自動設定生產日期為當前日期
+            //count_datetime();//計算生產時間
+            //count_alloy_std_hour_qty();//計算合金部的每小時標準碑數
         }
 
         private void txtprd_weg_Leave(object sender, EventArgs e)
@@ -2144,8 +2108,9 @@ namespace cf_pad.Forms
             objModel.pack_num = (txtPack_num.Text != "" ? Convert.ToInt32(txtPack_num.Text) : 1);
             if (prdDep == "J07")
             {
-                objModel.work_code = cmbWorkCode.SelectedValue == null ? "" : cmbWorkCode.SelectedValue.ToString();
-                objModel.difficulty_level = cmbDifficultyLevel.SelectedValue == null ? "" : cmbDifficultyLevel.SelectedValue.ToString();
+                objModel.work_code = cmbWorkCode.SelectedValue == null ? "" : cmbWorkCode.SelectedValue.ToString().Trim();
+                objModel.difficulty_level = cmbDifficultyLevel.SelectedValue == null ? "" : cmbDifficultyLevel.SelectedValue.ToString().Trim();
+                objModel.mat_item_lot = cmbMakeColor.SelectedValue == null ? "" : cmbMakeColor.SelectedValue.ToString().Trim();
             }
             else
             {
@@ -2258,6 +2223,7 @@ namespace cf_pad.Forms
             txtProductNo.Text = "";
             txtTotalQty.Text = "";
             cmbWorkType.SelectedValue = "A02";
+            cmbMakeColor.SelectedValue = "";
             //txtFindMo.Text = txtmo_id.Text;
             //txtWipDep.Text = cmbProductDept.Text;
             //txtBarCodeItem.Text = cmbGoods_id.Text;
@@ -2265,7 +2231,7 @@ namespace cf_pad.Forms
             get_last_run_qty();//獲取最後一次的碑數
             //get_total_prd_qty();//顯示單的總完成數量
             countReqPrdQty();//計算待生產數量
-            if (cmbProductDept.SelectedValue.ToString().Trim() == "302")//302部門的，要將標準時能清空
+            if (cmbProductDept.SelectedValue.ToString().Trim() == "322")//302部門的，要將標準時能清空
                 txtper_Standrad_qty.Text = "";
             //dgvWorker.DataSource = null;
             loadProductWorker();
@@ -2406,6 +2372,7 @@ namespace cf_pad.Forms
                 tabControl1.SelectedIndex = 0;
                 edit_type = "Y";
             }
+            btnMerge.Text = "并單生產(&G)";
             txtBarCode.Focus();
         }
 
@@ -2625,6 +2592,8 @@ namespace cf_pad.Forms
         {
             if (edit_type == "Y")//合金部 生產數 = 每碑數 * 實際碑數
             {
+                if (cmbProductDept.SelectedValue.ToString().Trim() == "J07")
+                    return;
                 count_run_qty();//計算實際碑數  合金部使用
             }
         }
@@ -2672,8 +2641,13 @@ namespace cf_pad.Forms
         }
         private void countWorkCodeQty()
         {
-            if (txtRow_qty.Text != "" && txtPrd_Run_qty.Text != "")
-                txtPrd_qty.Text = (Convert.ToInt32(txtRow_qty.Text) * Convert.ToInt32(txtPrd_Run_qty.Text)).ToString();
+            if (cmbProductDept.SelectedValue.ToString().Trim() == "J07")
+            {
+                if (txtRow_qty.Text != "" && txtPrd_Run_qty.Text != "")
+                    txtPrd_qty.Text = (Convert.ToInt32(txtRow_qty.Text) * Convert.ToInt32(txtPrd_Run_qty.Text)
+                        + (txtActual_qty.Text != "" ? Convert.ToInt32(txtActual_qty.Text) : 0)
+                        ).ToString();
+            }
         }
 
         private void btnAddWorker_Click(object sender, EventArgs e)
@@ -2730,6 +2704,130 @@ namespace cf_pad.Forms
         {
             getJobTimes();//排板、噴油次數
             getDefaultWorkCode();
+        }
+
+        private void txtActual_qty_TextChanged(object sender, EventArgs e)
+        {
+            if (edit_type == "Y")
+            {
+                if (cmbProductDept.SelectedValue.ToString().Trim() == "J07")
+                    countWorkCodeQty();
+            }
+        }
+
+        private void txtMoMerge_Leave(object sender, EventArgs e)
+        {
+            SetGoodsComboxValue(txtMoMerge.Text.Trim(),cmbGoodsMerge);
+            SetMergeGoodsProductQty(cmbGoodsMerge.Text.Trim());
+        }
+        private void cmbGoodsMerge_Leave(object sender, EventArgs e)
+        {
+            SetMergeGoodsProductQty(cmbGoodsMerge.Text.Trim());
+        }
+        private void SetMergeGoodsProductQty(string goods_id)
+        {
+            if (dtMo_item.Rows.Count > 0)
+            {
+                for(int i=0;i<dtMo_item.Rows.Count;i++)
+                {
+                    if(dtMo_item.Rows[i]["goods_id"].ToString().Trim()== cmbGoodsMerge.Text.Trim())
+                    {
+                        txtPrd_qty_merge.Text = dtMo_item.Rows[i]["prod_qty"].ToString();
+                        break;
+                    }
+                }
+            }
+        }
+        private void btnMerge_Click(object sender, EventArgs e)
+        {
+            if (btnMerge.Text == "并單生產(&G)")
+            {
+                LoadMergeProductMo();
+                btnMerge.Text = "編輯(&B)";
+                tabControl1.SelectedIndex = 2;
+                edit_type = "N";
+            }
+            else
+            {
+                btnMerge.Text = "并單生產(&G)";
+                tabControl1.SelectedIndex = 0;
+                edit_type = "N";
+            }
+            btnBrowse.Text = "瀏覽(&B)";
+            txtBarCode.Focus();
+        }
+        private void SaveMergeProductMo()
+        {
+            if(record_id<0)
+            {
+                MessageBox.Show("沒有儲存的記錄!");
+                return;
+            }
+            if(txtMoMerge.Text.Trim()==""||cmbGoodsMerge.Text.Trim()==""||txtPrd_qty_merge.Text.Trim()=="")
+            {
+                MessageBox.Show("制單資料不能為空!");
+                return;
+            }
+            if (!clsValidRule.IsNumeric(txtPrd_qty_merge.Text))
+            {
+                MessageBox.Show("生產數量格式有誤,請重新輸入!");
+                txtPrd_qty_merge.Focus();
+                txtPrd_qty_merge.SelectAll();
+                return;
+            }
+            int result=clsProductionSchedule.SaveMergeProductMo(record_id, txtMoMerge.Text.Trim(), cmbGoodsMerge.Text.Trim(), Convert.ToInt32(txtPrd_qty_merge.Text));
+            if (result <= 0)
+            {
+                MessageBox.Show("添加制單編號失敗!");
+            }
+            else
+            {
+                txtMoMerge.Text = "";
+                cmbGoodsMerge.Text = "";
+                txtPrd_qty_merge.Text = "";
+                LoadMergeProductMo();
+                txtBarCode.Focus();
+            }
+        }
+        private void LoadMergeProductMo()
+        {
+            DataTable dtMerge = clsProductionSchedule.LoadMergeProductMo(record_id);
+            dgvMoMerge.DataSource = dtMerge;
+        }
+
+        private void btnAddMergeMo_Click(object sender, EventArgs e)
+        {
+            SaveMergeProductMo();
+        }
+
+        private void btnDeleteMergeMo_Click(object sender, EventArgs e)
+        {
+            if (record_id < 0 || dgvMoMerge.Rows.Count==0)
+            {
+                MessageBox.Show("沒有儲存的記錄!");
+                return;
+            }
+            int row = dgvMoMerge.CurrentRow.Index;
+            if(row<0)
+            {
+                MessageBox.Show("請選擇記錄!");
+                return;
+            }
+            string prd_mo = dgvMoMerge.Rows[row].Cells["colprd_mo_merge"].Value.ToString().Trim();
+            string prd_item = dgvMoMerge.Rows[row].Cells["colprd_item_merge"].Value.ToString().Trim();
+            int result=clsProductionSchedule.DeleteMergeProductMo(record_id, prd_mo, prd_item);
+            if (result <= 0)
+            {
+                MessageBox.Show("刪除制單編號失敗!");
+            }
+            else
+            {
+                txtMoMerge.Text = "";
+                cmbGoodsMerge.Text = "";
+                txtPrd_qty_merge.Text = "";
+                LoadMergeProductMo();
+                txtBarCode.Focus();
+            }
         }
     }
 }
