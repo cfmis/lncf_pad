@@ -280,10 +280,15 @@ namespace cf_pad.Forms
             txtgoods_desc.Text = "";
             cmb.Items.Clear();
 
+            //處理一些本部門幫其它部門生產的單
             string dep = txtWipDep.Text.Trim();//cmbProductDept.SelectedValue.ToString();
-            if (dep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
+            string orgDep = dep;
+            if (orgDep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
                 dep = "102";
-            for (int k = 1; k <= 2; k++)
+            int cycleIndex = 2;
+            if (orgDep == "128")//如果是洗油的，本部門沒有流程，可能是幫其它部門做的
+                cycleIndex = 3;
+            for (int k = 1; k <= cycleIndex; k++)
             {
                 dtMo_item = clsProductionSchedule.getItemByMo(Prd_mo, dep);
                 if (dtMo_item.Rows.Count > 0)
@@ -295,11 +300,18 @@ namespace cf_pad.Forms
                     cmb.SelectedIndex = 0;
                     break;
                 }
-                if (dep == "128")
-                    dep = "108";
-                else if (dep == "322")
+                if (orgDep == "128")
+                {
+                    if (k == 1)
+                        dep = "108";
+                    else if (k == 2)
+                        dep = "102";
+                    else if (k == 3)
+                        dep = "122";
+                }
+                else if (orgDep == "322")
                     dep = "302";
-                else if (dep == "125")
+                else if (orgDep == "125")
                     dep = "105";
                 else
                     break;

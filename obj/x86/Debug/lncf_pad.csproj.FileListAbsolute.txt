@@ -160,4 +160,3 @@ C:\workspace\lncf_pad\bin\Debug\de\DevExpress.XtraTreeList.v14.2.resources.dll
 C:\workspace\lncf_pad\bin\Debug\es\DevExpress.XtraTreeList.v14.2.resources.dll
 C:\workspace\lncf_pad\bin\Debug\ja\DevExpress.XtraTreeList.v14.2.resources.dll
 C:\workspace\lncf_pad\bin\Debug\ru\DevExpress.XtraTreeList.v14.2.resources.dll
-C:\Workspace\lncf_pad\obj\x86\Debug\lncf_pad.csprojResolveAssemblyReference.cache
