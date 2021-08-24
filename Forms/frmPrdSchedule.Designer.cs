@@ -94,6 +94,8 @@
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.btnImput = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnMerge = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.txtDifficulty_level = new System.Windows.Forms.TextBox();
             this.txtEnd_run = new System.Windows.Forms.TextBox();
             this.txtSpeed_lever = new System.Windows.Forms.TextBox();
@@ -106,6 +108,9 @@
             this.txtPer_Convert_qty = new System.Windows.Forms.TextBox();
             this.txtTotalQty = new System.Windows.Forms.TextBox();
             this.dgvMoMerge = new System.Windows.Forms.DataGridView();
+            this.colprd_mo_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colprd_item_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colprd_qty_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblStandard_per_qty = new System.Windows.Forms.Label();
             this.txtWork_class = new System.Windows.Forms.TextBox();
             this.lblWork_code = new System.Windows.Forms.Label();
@@ -186,8 +191,6 @@
             this.lblMoStatus = new System.Windows.Forms.Label();
             this.tp1Details = new System.Windows.Forms.TabPage();
             this.dgvDetails = new System.Windows.Forms.DataGridView();
-            this.tp1Mer = new System.Windows.Forms.TabPage();
-            this.panel9 = new System.Windows.Forms.Panel();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -208,17 +211,15 @@
             this.Column14 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column15 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column16 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmbGoodsMerge = new System.Windows.Forms.ComboBox();
-            this.btnMerge = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.txtPrd_qty_merge = new System.Windows.Forms.TextBox();
-            this.colprd_mo_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colprd_item_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colprd_qty_merge = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnAddMergeMo = new System.Windows.Forms.Button();
-            this.lblGoodsMerge = new System.Windows.Forms.Label();
-            this.lblprd_qty_merge = new System.Windows.Forms.Label();
+            this.tp1Mer = new System.Windows.Forms.TabPage();
+            this.panel9 = new System.Windows.Forms.Panel();
             this.btnDeleteMergeMo = new System.Windows.Forms.Button();
+            this.lblprd_qty_merge = new System.Windows.Forms.Label();
+            this.lblGoodsMerge = new System.Windows.Forms.Label();
+            this.btnAddMergeMo = new System.Windows.Forms.Button();
+            this.txtPrd_qty_merge = new System.Windows.Forms.TextBox();
+            this.cmbGoodsMerge = new System.Windows.Forms.ComboBox();
+            this.lblWipDep = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -746,6 +747,7 @@
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.Moccasin;
+            this.panel7.Controls.Add(this.lblWipDep);
             this.panel7.Controls.Add(this.txtWipDep);
             this.panel7.Controls.Add(this.panel11);
             this.panel7.Controls.Add(this.txtBarCode);
@@ -767,11 +769,12 @@
             // 
             // txtWipDep
             // 
-            this.txtWipDep.Location = new System.Drawing.Point(1053, 47);
+            this.txtWipDep.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.txtWipDep.Location = new System.Drawing.Point(1102, 38);
             this.txtWipDep.Name = "txtWipDep";
-            this.txtWipDep.Size = new System.Drawing.Size(100, 22);
+            this.txtWipDep.ReadOnly = true;
+            this.txtWipDep.Size = new System.Drawing.Size(100, 27);
             this.txtWipDep.TabIndex = 41;
-            this.txtWipDep.Visible = false;
             // 
             // panel11
             // 
@@ -964,6 +967,22 @@
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(6, 44);
             // 
+            // btnMerge
+            // 
+            this.btnMerge.AutoSize = false;
+            this.btnMerge.Image = ((System.Drawing.Image)(resources.GetObject("btnMerge.Image")));
+            this.btnMerge.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnMerge.Name = "btnMerge";
+            this.btnMerge.Size = new System.Drawing.Size(85, 46);
+            this.btnMerge.Text = "并單生產(&G)";
+            this.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 44);
+            // 
             // txtDifficulty_level
             // 
             this.txtDifficulty_level.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
@@ -1109,6 +1128,30 @@
             this.dgvMoMerge.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dgvMoMerge.Size = new System.Drawing.Size(1225, 566);
             this.dgvMoMerge.TabIndex = 33;
+            // 
+            // colprd_mo_merge
+            // 
+            this.colprd_mo_merge.DataPropertyName = "prd_mo";
+            this.colprd_mo_merge.HeaderText = "制單編號";
+            this.colprd_mo_merge.Name = "colprd_mo_merge";
+            this.colprd_mo_merge.ReadOnly = true;
+            this.colprd_mo_merge.Width = 160;
+            // 
+            // colprd_item_merge
+            // 
+            this.colprd_item_merge.DataPropertyName = "prd_item";
+            this.colprd_item_merge.HeaderText = "物料編號";
+            this.colprd_item_merge.Name = "colprd_item_merge";
+            this.colprd_item_merge.ReadOnly = true;
+            this.colprd_item_merge.Width = 360;
+            // 
+            // colprd_qty_merge
+            // 
+            this.colprd_qty_merge.DataPropertyName = "prd_qty";
+            this.colprd_qty_merge.HeaderText = "生產數量";
+            this.colprd_qty_merge.Name = "colprd_qty_merge";
+            this.colprd_qty_merge.ReadOnly = true;
+            this.colprd_qty_merge.Width = 120;
             // 
             // lblStandard_per_qty
             // 
@@ -2051,33 +2094,6 @@
             this.dgvDetails.CellLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDetails_CellLeave);
             this.dgvDetails.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvDetails_RowPostPaint);
             // 
-            // tp1Mer
-            // 
-            this.tp1Mer.Controls.Add(this.dgvMoMerge);
-            this.tp1Mer.Controls.Add(this.panel9);
-            this.tp1Mer.Location = new System.Drawing.Point(4, 124);
-            this.tp1Mer.Name = "tp1Mer";
-            this.tp1Mer.Size = new System.Drawing.Size(1225, 614);
-            this.tp1Mer.TabIndex = 5;
-            this.tp1Mer.Text = "制單并單";
-            this.tp1Mer.UseVisualStyleBackColor = true;
-            // 
-            // panel9
-            // 
-            this.panel9.Controls.Add(this.btnDeleteMergeMo);
-            this.panel9.Controls.Add(this.lblprd_qty_merge);
-            this.panel9.Controls.Add(this.lblGoodsMerge);
-            this.panel9.Controls.Add(this.btnAddMergeMo);
-            this.panel9.Controls.Add(this.txtPrd_qty_merge);
-            this.panel9.Controls.Add(this.cmbGoodsMerge);
-            this.panel9.Controls.Add(this.lblMo_search);
-            this.panel9.Controls.Add(this.txtMoMerge);
-            this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel9.Location = new System.Drawing.Point(0, 0);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(1225, 48);
-            this.panel9.TabIndex = 34;
-            // 
             // Column2
             // 
             this.Column2.DataPropertyName = "prd_start_time";
@@ -2214,63 +2230,60 @@
             this.Column16.Name = "Column16";
             this.Column16.Width = 180;
             // 
-            // cmbGoodsMerge
+            // tp1Mer
             // 
-            this.cmbGoodsMerge.Font = new System.Drawing.Font("新細明體", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.cmbGoodsMerge.FormattingEnabled = true;
-            this.cmbGoodsMerge.Location = new System.Drawing.Point(372, 13);
-            this.cmbGoodsMerge.MaxLength = 18;
-            this.cmbGoodsMerge.Name = "cmbGoodsMerge";
-            this.cmbGoodsMerge.Size = new System.Drawing.Size(267, 27);
-            this.cmbGoodsMerge.TabIndex = 2;
-            this.cmbGoodsMerge.Leave += new System.EventHandler(this.cmbGoodsMerge_Leave);
+            this.tp1Mer.Controls.Add(this.dgvMoMerge);
+            this.tp1Mer.Controls.Add(this.panel9);
+            this.tp1Mer.Location = new System.Drawing.Point(4, 124);
+            this.tp1Mer.Name = "tp1Mer";
+            this.tp1Mer.Size = new System.Drawing.Size(1225, 614);
+            this.tp1Mer.TabIndex = 5;
+            this.tp1Mer.Text = "制單并單";
+            this.tp1Mer.UseVisualStyleBackColor = true;
             // 
-            // btnMerge
+            // panel9
             // 
-            this.btnMerge.AutoSize = false;
-            this.btnMerge.Image = ((System.Drawing.Image)(resources.GetObject("btnMerge.Image")));
-            this.btnMerge.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnMerge.Name = "btnMerge";
-            this.btnMerge.Size = new System.Drawing.Size(85, 46);
-            this.btnMerge.Text = "并單生產(&G)";
-            this.btnMerge.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnMerge.Click += new System.EventHandler(this.btnMerge_Click);
+            this.panel9.Controls.Add(this.btnDeleteMergeMo);
+            this.panel9.Controls.Add(this.lblprd_qty_merge);
+            this.panel9.Controls.Add(this.lblGoodsMerge);
+            this.panel9.Controls.Add(this.btnAddMergeMo);
+            this.panel9.Controls.Add(this.txtPrd_qty_merge);
+            this.panel9.Controls.Add(this.cmbGoodsMerge);
+            this.panel9.Controls.Add(this.lblMo_search);
+            this.panel9.Controls.Add(this.txtMoMerge);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel9.Location = new System.Drawing.Point(0, 0);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(1225, 48);
+            this.panel9.TabIndex = 34;
             // 
-            // toolStripSeparator8
+            // btnDeleteMergeMo
             // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 44);
+            this.btnDeleteMergeMo.Location = new System.Drawing.Point(970, 13);
+            this.btnDeleteMergeMo.Name = "btnDeleteMergeMo";
+            this.btnDeleteMergeMo.Size = new System.Drawing.Size(100, 27);
+            this.btnDeleteMergeMo.TabIndex = 7;
+            this.btnDeleteMergeMo.Text = "刪除";
+            this.btnDeleteMergeMo.UseVisualStyleBackColor = true;
+            this.btnDeleteMergeMo.Click += new System.EventHandler(this.btnDeleteMergeMo_Click);
             // 
-            // txtPrd_qty_merge
+            // lblprd_qty_merge
             // 
-            this.txtPrd_qty_merge.Location = new System.Drawing.Point(726, 13);
-            this.txtPrd_qty_merge.Name = "txtPrd_qty_merge";
-            this.txtPrd_qty_merge.Size = new System.Drawing.Size(100, 27);
-            this.txtPrd_qty_merge.TabIndex = 3;
+            this.lblprd_qty_merge.AutoSize = true;
+            this.lblprd_qty_merge.Location = new System.Drawing.Point(647, 16);
+            this.lblprd_qty_merge.Name = "lblprd_qty_merge";
+            this.lblprd_qty_merge.Size = new System.Drawing.Size(76, 16);
+            this.lblprd_qty_merge.TabIndex = 6;
+            this.lblprd_qty_merge.Text = "生產數量:";
             // 
-            // colprd_mo_merge
+            // lblGoodsMerge
             // 
-            this.colprd_mo_merge.DataPropertyName = "prd_mo";
-            this.colprd_mo_merge.HeaderText = "制單編號";
-            this.colprd_mo_merge.Name = "colprd_mo_merge";
-            this.colprd_mo_merge.ReadOnly = true;
-            this.colprd_mo_merge.Width = 160;
-            // 
-            // colprd_item_merge
-            // 
-            this.colprd_item_merge.DataPropertyName = "prd_item";
-            this.colprd_item_merge.HeaderText = "物料編號";
-            this.colprd_item_merge.Name = "colprd_item_merge";
-            this.colprd_item_merge.ReadOnly = true;
-            this.colprd_item_merge.Width = 360;
-            // 
-            // colprd_qty_merge
-            // 
-            this.colprd_qty_merge.DataPropertyName = "prd_qty";
-            this.colprd_qty_merge.HeaderText = "生產數量";
-            this.colprd_qty_merge.Name = "colprd_qty_merge";
-            this.colprd_qty_merge.ReadOnly = true;
-            this.colprd_qty_merge.Width = 120;
+            this.lblGoodsMerge.AutoSize = true;
+            this.lblGoodsMerge.Location = new System.Drawing.Point(297, 16);
+            this.lblGoodsMerge.Name = "lblGoodsMerge";
+            this.lblGoodsMerge.Size = new System.Drawing.Size(76, 16);
+            this.lblGoodsMerge.TabIndex = 5;
+            this.lblGoodsMerge.Text = "物料編號:";
             // 
             // btnAddMergeMo
             // 
@@ -2282,33 +2295,34 @@
             this.btnAddMergeMo.UseVisualStyleBackColor = true;
             this.btnAddMergeMo.Click += new System.EventHandler(this.btnAddMergeMo_Click);
             // 
-            // lblGoodsMerge
+            // txtPrd_qty_merge
             // 
-            this.lblGoodsMerge.AutoSize = true;
-            this.lblGoodsMerge.Location = new System.Drawing.Point(297, 16);
-            this.lblGoodsMerge.Name = "lblGoodsMerge";
-            this.lblGoodsMerge.Size = new System.Drawing.Size(76, 16);
-            this.lblGoodsMerge.TabIndex = 5;
-            this.lblGoodsMerge.Text = "物料編號:";
+            this.txtPrd_qty_merge.Location = new System.Drawing.Point(726, 13);
+            this.txtPrd_qty_merge.Name = "txtPrd_qty_merge";
+            this.txtPrd_qty_merge.Size = new System.Drawing.Size(100, 27);
+            this.txtPrd_qty_merge.TabIndex = 3;
             // 
-            // lblprd_qty_merge
+            // cmbGoodsMerge
             // 
-            this.lblprd_qty_merge.AutoSize = true;
-            this.lblprd_qty_merge.Location = new System.Drawing.Point(647, 16);
-            this.lblprd_qty_merge.Name = "lblprd_qty_merge";
-            this.lblprd_qty_merge.Size = new System.Drawing.Size(76, 16);
-            this.lblprd_qty_merge.TabIndex = 6;
-            this.lblprd_qty_merge.Text = "生產數量:";
+            this.cmbGoodsMerge.Font = new System.Drawing.Font("新細明體", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.cmbGoodsMerge.FormattingEnabled = true;
+            this.cmbGoodsMerge.Location = new System.Drawing.Point(372, 13);
+            this.cmbGoodsMerge.MaxLength = 18;
+            this.cmbGoodsMerge.Name = "cmbGoodsMerge";
+            this.cmbGoodsMerge.Size = new System.Drawing.Size(267, 27);
+            this.cmbGoodsMerge.TabIndex = 2;
+            this.cmbGoodsMerge.Leave += new System.EventHandler(this.cmbGoodsMerge_Leave);
             // 
-            // btnDeleteMergeMo
+            // lblWipDep
             // 
-            this.btnDeleteMergeMo.Location = new System.Drawing.Point(970, 13);
-            this.btnDeleteMergeMo.Name = "btnDeleteMergeMo";
-            this.btnDeleteMergeMo.Size = new System.Drawing.Size(100, 27);
-            this.btnDeleteMergeMo.TabIndex = 7;
-            this.btnDeleteMergeMo.Text = "刪除";
-            this.btnDeleteMergeMo.UseVisualStyleBackColor = true;
-            this.btnDeleteMergeMo.Click += new System.EventHandler(this.btnDeleteMergeMo_Click);
+            this.lblWipDep.AutoSize = true;
+            this.lblWipDep.Font = new System.Drawing.Font("新細明體", 12F);
+            this.lblWipDep.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblWipDep.Location = new System.Drawing.Point(1025, 44);
+            this.lblWipDep.Name = "lblWipDep";
+            this.lblWipDep.Size = new System.Drawing.Size(76, 16);
+            this.lblWipDep.TabIndex = 42;
+            this.lblWipDep.Text = "流程部門:";
             // 
             // frmPrdSchedule
             // 
@@ -2552,5 +2566,6 @@
         private System.Windows.Forms.Label lblGoodsMerge;
         private System.Windows.Forms.Label lblprd_qty_merge;
         private System.Windows.Forms.Button btnDeleteMergeMo;
+        private System.Windows.Forms.Label lblWipDep;
     }
 }

@@ -281,25 +281,16 @@ namespace cf_pad.Forms
             cmb.Items.Clear();
 
             //處理一些本部門幫其它部門生產的單
-            string dep = txtWipDep.Text.Trim();//cmbProductDept.SelectedValue.ToString();
+            string dep = cmbProductDept.SelectedValue.ToString();//txtWipDep.Text.Trim();//
             string orgDep = dep;
             if (orgDep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
                 dep = "102";
             int cycleIndex = 2;
             if (orgDep == "128")//如果是洗油的，本部門沒有流程，可能是幫其它部門做的
                 cycleIndex = 3;
+            dtMo_item = clsProductionSchedule.getItemByMo(Prd_mo, dep);
             for (int k = 1; k <= cycleIndex; k++)
             {
-                dtMo_item = clsProductionSchedule.getItemByMo(Prd_mo, dep);
-                if (dtMo_item.Rows.Count > 0)
-                {
-                    for (int i = 0; i < dtMo_item.Rows.Count; i++)
-                    {
-                        cmb.Items.Add(dtMo_item.Rows[i]["goods_id"].ToString());
-                    }
-                    cmb.SelectedIndex = 0;
-                    break;
-                }
                 if (orgDep == "128")
                 {
                     if (k == 1)
@@ -315,7 +306,25 @@ namespace cf_pad.Forms
                     dep = "105";
                 else
                     break;
-                txtWipDep.Text = dep;
+                DataTable dtMo_item1 = clsProductionSchedule.getItemByMo(Prd_mo, dep);
+                if (dtMo_item1.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dtMo_item1.Rows.Count; i++)
+                    {
+                        dtMo_item.Rows.Add(dtMo_item1.Rows[i].ItemArray);  //添加数据行
+                    }
+                }
+                
+            }
+            if (dtMo_item.Rows.Count > 0)
+            {
+                for (int i = 0; i < dtMo_item.Rows.Count; i++)
+                {
+                    cmb.Items.Add(dtMo_item.Rows[i]["goods_id"].ToString());//dep + "--" + 
+                }
+                cmb.SelectedIndex = 0;
+                txtWipDep.Text = dtMo_item.Rows[0]["wp_id"].ToString();
+                //break;
             }
         }
         //獲取制單編號資料，并綁定物料編號
@@ -2409,9 +2418,15 @@ namespace cf_pad.Forms
 
         private void cmbGoods_id_Leave(object sender, EventArgs e)
         {
-            txtFindMo.Text = txtmo_id.Text;
-            txtBarCodeItem.Text = cmbGoods_id.Text;
             
+            txtFindMo.Text = txtmo_id.Text;
+            string goods_id = cmbGoods_id.Text.Trim();
+            txtBarCodeItem.Text = goods_id;
+            if (dtMo_item.Rows.Count > 0)
+            {
+                DataRow[] drs = dtMo_item.Select("goods_id= '" + goods_id + "'");
+                txtWipDep.Text = drs[0]["wp_id"].ToString();
+            }
             getMoDataSource();//從生產表或排期表或流程中獲取記錄
 
         }
