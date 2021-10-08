@@ -278,7 +278,7 @@ namespace cf_pad.Forms
         {
             cmbGoods_id.Text = "";
             txtgoods_desc.Text = "";
-            cmb.Items.Clear(); 
+            cmb.Items.Clear();  
 
             //處理一些本部門幫其它部門生產的單
             string dep = cmbProductDept.SelectedValue.ToString();//txtWipDep.Text.Trim();//

@@ -270,7 +270,6 @@ C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\bin\Debug\de\DevExpress.XtraTreeL
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\bin\Debug\es\DevExpress.XtraTreeList.v14.2.resources.dll
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\bin\Debug\ja\DevExpress.XtraTreeList.v14.2.resources.dll
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\bin\Debug\ru\DevExpress.XtraTreeList.v14.2.resources.dll
-C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\obj\x86\Debug\lncf_pad.csprojResolveAssemblyReference.cache
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\obj\x86\Debug\cf_pad.Forms.frmKeyboard.resources
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\obj\x86\Debug\cf_pad.Forms.frmMachineStdQty.resources
 C:\Users\leavy_lai\Source\Repos\cfmis\lncf_pad\obj\x86\Debug\cf_pad.Forms.frmPrdSchedule.resources
