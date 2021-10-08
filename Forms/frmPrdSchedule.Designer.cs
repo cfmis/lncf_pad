@@ -73,6 +73,7 @@
             this.lblWork_type = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.lblWipDep = new System.Windows.Forms.Label();
             this.txtWipDep = new System.Windows.Forms.TextBox();
             this.panel11 = new System.Windows.Forms.Panel();
             this.lblAutoSave = new System.Windows.Forms.Label();
@@ -219,7 +220,6 @@
             this.btnAddMergeMo = new System.Windows.Forms.Button();
             this.txtPrd_qty_merge = new System.Windows.Forms.TextBox();
             this.cmbGoodsMerge = new System.Windows.Forms.ComboBox();
-            this.lblWipDep = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel11.SuspendLayout();
@@ -766,6 +766,17 @@
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(1229, 79);
             this.panel7.TabIndex = 1;
+            // 
+            // lblWipDep
+            // 
+            this.lblWipDep.AutoSize = true;
+            this.lblWipDep.Font = new System.Drawing.Font("新細明體", 12F);
+            this.lblWipDep.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblWipDep.Location = new System.Drawing.Point(1025, 44);
+            this.lblWipDep.Name = "lblWipDep";
+            this.lblWipDep.Size = new System.Drawing.Size(76, 16);
+            this.lblWipDep.TabIndex = 42;
+            this.lblWipDep.Text = "流程部門:";
             // 
             // txtWipDep
             // 
@@ -1821,7 +1832,7 @@
             this.cmbMakeColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMakeColor.Font = new System.Drawing.Font("新細明體", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.cmbMakeColor.FormattingEnabled = true;
-            this.cmbMakeColor.Location = new System.Drawing.Point(1073, 32);
+            this.cmbMakeColor.Location = new System.Drawing.Point(1073, 31);
             this.cmbMakeColor.Name = "cmbMakeColor";
             this.cmbMakeColor.Size = new System.Drawing.Size(178, 29);
             this.cmbMakeColor.TabIndex = 49;
@@ -2312,17 +2323,6 @@
             this.cmbGoodsMerge.Size = new System.Drawing.Size(267, 27);
             this.cmbGoodsMerge.TabIndex = 2;
             this.cmbGoodsMerge.Leave += new System.EventHandler(this.cmbGoodsMerge_Leave);
-            // 
-            // lblWipDep
-            // 
-            this.lblWipDep.AutoSize = true;
-            this.lblWipDep.Font = new System.Drawing.Font("新細明體", 12F);
-            this.lblWipDep.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lblWipDep.Location = new System.Drawing.Point(1025, 44);
-            this.lblWipDep.Name = "lblWipDep";
-            this.lblWipDep.Size = new System.Drawing.Size(76, 16);
-            this.lblWipDep.TabIndex = 42;
-            this.lblWipDep.Text = "流程部門:";
             // 
             // frmPrdSchedule
             // 

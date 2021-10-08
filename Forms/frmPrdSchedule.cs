@@ -283,11 +283,15 @@ namespace cf_pad.Forms
             //處理一些本部門幫其它部門生產的單
             string dep = cmbProductDept.SelectedValue.ToString();//txtWipDep.Text.Trim();//
             string orgDep = dep;
-            if (orgDep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
-                dep = "102";
+            if (dep == "J07")
+                dep = txtWipDep.Text.Trim();
+            //if (orgDep == "104")//如果是104幫102加工的，則將部門改成102來提取記錄
+            //    dep = "102";
             int cycleIndex = 2;
-            if (orgDep == "128")//如果是洗油的，本部門沒有流程，可能是幫其它部門做的
+            if (orgDep == "128" || orgDep == "104")//如果是洗油的，本部門沒有流程，可能是幫其它部門做的
                 cycleIndex = 3;
+            else if(orgDep != "J07")
+                cycleIndex = 0;
             dtMo_item = clsProductionSchedule.getItemByMo(Prd_mo, dep);
             for (int k = 1; k <= cycleIndex; k++)
             {
@@ -304,6 +308,15 @@ namespace cf_pad.Forms
                     dep = "302";
                 else if (orgDep == "125")
                     dep = "105";
+                else if (orgDep == "104")
+                {
+                    if (k == 1)
+                        dep = "124";
+                    else if (k == 2)
+                        dep = "102";
+                    else if (k == 3)
+                        dep = "122";
+                }
                 else
                     break;
                 DataTable dtMo_item1 = clsProductionSchedule.getItemByMo(Prd_mo, dep);
@@ -314,7 +327,7 @@ namespace cf_pad.Forms
                         dtMo_item.Rows.Add(dtMo_item1.Rows[i].ItemArray);  //添加数据行
                     }
                 }
-                
+
             }
             if (dtMo_item.Rows.Count > 0)
             {
